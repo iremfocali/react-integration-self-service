@@ -50,6 +50,20 @@ export const DashboardMenu: DashboardMenuProps[] = [
   },
   {
     id: uuid(),
+    title: "Integrations",
+    icon: "layers",
+    children: [
+      { id: uuid(), link: "/integrations/event", name: "Event" },
+      { id: uuid(), link: "/integrations/event/gtm", name: "Event GTM" },
+      { id: uuid(), link: "/integrations/event/direct", name: "Event Direct" },
+      { id: uuid(), link: "/integrations/event/server", name: "Event Server" },
+      { id: uuid(), link: "/integrations/product", name: "Product" },
+      { id: uuid(), link: "/integrations/offline", name: "Offline" },
+      { id: uuid(), link: "/integrations/webpush", name: "Web Push" },
+    ],
+  },
+  {
+    id: uuid(),
     title: "Authentication",
     icon: "lock",
     children: [

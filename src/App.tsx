@@ -17,6 +17,13 @@ import LayoutVertical from "pages/dashboard/LayoutVertical";
 import Documentation from "pages/dashboard/Documentation";
 import ChangeLog from "pages/dashboard/Changelog";
 import ApiDemo from "./pages/dashboard/pages/ApiDemo";
+import Event from "./pages/integrations/Event";
+import EventGTM from "./pages/integrations/EventGTM";
+import EventDirect from "./pages/integrations/EventDirect";
+import EventServer from "./pages/integrations/EventServer";
+import Product from "./pages/integrations/Product";
+import Offline from "./pages/integrations/Offline";
+import WebPush from "./pages/integrations/WebPush";
 
 // import bootstrap components
 import Accordion from "bootstrap-components/Accordions";
@@ -80,6 +87,40 @@ const App = () => {
             {
               path: "api-demo",
               Component: ApiDemo,
+            },
+          ],
+        },
+        {
+          id: "integrations",
+          path: "/integrations",
+          children: [
+            {
+              path: "event",
+              Component: Event,
+            },
+            {
+              path: "event/gtm",
+              Component: EventGTM,
+            },
+            {
+              path: "event/direct",
+              Component: EventDirect,
+            },
+            {
+              path: "event/server",
+              Component: EventServer,
+            },
+            {
+              path: "product",
+              Component: Product,
+            },
+            {
+              path: "offline",
+              Component: Offline,
+            },
+            {
+              path: "webpush",
+              Component: WebPush,
             },
           ],
         },
