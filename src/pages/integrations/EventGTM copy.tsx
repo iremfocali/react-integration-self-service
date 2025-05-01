@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import node module libraries
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Offcanvas, Badge, Accordion, Table, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Offcanvas, Badge, Accordion, Table, InputGroup, Modal, Form } from "react-bootstrap";
 
 // import widget/custom components
 import { PageHeading } from "widgets";
@@ -110,7 +110,22 @@ const EventGTM = () => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<GTMTags | null>(null);
   const [offcanvasWidth, setOffcanvasWidth] = useState("40%");
+  const [showAddTagModal, setShowAddTagModal] = useState(false);
+  const [newTag, setNewTag] = useState({
+    name: "",
+    type: "html",
+    triggers: "",
+    variables: "",
+    code: "",
+  });
 
+  const handleNewTagClose = () => {
+    setShowAddTagModal(false);
+  };
+
+  const handleNewTagShow = () => {
+    setShowAddTagModal(true);
+  };
   // Update offcanvas width based on screen size
   useEffect(() => {
     const handleResize = () => {
@@ -263,6 +278,60 @@ const EventGTM = () => {
     };
   }
 
+  const handleAddTag = () => {
+    if (!newTag.name) return;
+
+    const newTagData: GTMTags = {
+      accountId: SampleGTMExport.containerVersion.accountId,
+      containerId: SampleGTMExport.containerVersion.containerId,
+      tagId: Date.now().toString(),
+      name: newTag.name,
+      type: newTag.type,
+      parameter: [{ type: "TEMPLATE", key: "html", value: newTag.code }],
+      fingerprint: "",
+      firingTriggerId: [],
+      tagFiringOption: "ONCE_PER_EVENT",
+      monitoringMetadata: {
+        type: "MAP",
+      },
+      consentSettings: {
+        consentStatus: "NOT_SET",
+      },
+    };
+    console.log(newTagData);
+
+    setNewTag({ name: "", type: "html", triggers: "", variables: "", code: "" });
+    handleNewTagClose();
+  };
+
+  const renderNewTagModal = () => {
+    return (
+      <Modal show={showAddTagModal} onHide={handleNewTagClose} size='lg' aria-labelledby='contained-modal-title-vcenter' centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Tag</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className='mb-3 row align-items-center'>
+              <Form.Label className='col-sm-3 mb-0'>Tag Name</Form.Label>
+              <div className='col-sm-9'>
+                <Form.Control type='text' value={newTag.name} onChange={(e) => setNewTag({ ...newTag, name: e.target.value })} placeholder='Enter tag name' />
+              </div>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleNewTagClose}>
+            Close
+          </Button>
+          <Button variant='primary' onClick={handleAddTag}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
   return (
     <Container fluid className='p-6'>
       <PageHeading heading='Event Integration' />
@@ -291,6 +360,15 @@ const EventGTM = () => {
             </Card.Header>
             <Card.Body>
               <Row>{SampleGTMExport.containerVersion.tag && SampleGTMExport.containerVersion.tag.filter((event) => event.name !== "RMC - ControlEventRequest").map((event) => renderEventCard(event))}</Row>
+
+              <Button
+                className='w-100'
+                variant='primary'
+                onClick={() => {
+                  handleNewTagShow();
+                }}>
+                <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Tag
+              </Button>
             </Card.Body>
           </Card>
         </Col>
@@ -314,6 +392,7 @@ const EventGTM = () => {
           )}
         </Offcanvas.Body>
       </Offcanvas>
+      {renderNewTagModal()}
     </Container>
   );
 };

@@ -19,6 +19,7 @@ import ChangeLog from "pages/dashboard/Changelog";
 import ApiDemo from "./pages/dashboard/pages/ApiDemo";
 import Event from "./pages/integrations/Event";
 import EventGTM from "./pages/integrations/EventGTM";
+import EventGTMCopy from "./pages/integrations/EventGTM copy";
 import EventDirect from "./pages/integrations/EventDirect";
 import EventServer from "./pages/integrations/EventServer";
 import Product from "./pages/integrations/Product";
@@ -101,6 +102,10 @@ const App = () => {
             {
               path: "event/gtm",
               Component: EventGTM,
+            },
+            {
+              path: "event/gtmCopy",
+              Component: EventGTMCopy,
             },
             {
               path: "event/direct",
