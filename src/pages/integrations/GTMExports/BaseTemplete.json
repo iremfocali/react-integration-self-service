@@ -1,0 +1,74 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-04-25 22:56:24",
+  "containerVersion": {
+    "path": "accounts/6050054095/containers/95073763/versions/0",
+    "accountId": "6050054095",
+    "containerId": "95073763",
+    "containerVersionId": "0",
+    "container": {
+      "path": "accounts/6050054095/containers/95073763",
+      "accountId": "6050054095",
+      "containerId": "95073763",
+      "name": "VisilabsHealthVersion",
+      "publicId": "GTM-NWNPZG6",
+      "usageContext": ["WEB"],
+      "fingerprint": "1665602934146",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6050054095/containers/95073763/workspaces?apiLink=container",
+      "features": {
+        "supportUserPermissions": true,
+        "supportEnvironments": true,
+        "supportWorkspaces": true,
+        "supportGtagConfigs": false,
+        "supportBuiltInVariables": true,
+        "supportClients": false,
+        "supportFolders": true,
+        "supportTags": true,
+        "supportTemplates": true,
+        "supportTriggers": true,
+        "supportVariables": true,
+        "supportVersions": true,
+        "supportZones": true,
+        "supportTransformations": false
+      },
+      "tagIds": ["GTM-NWNPZG6"]
+    },
+    "tag": [],
+    "trigger": [],
+    "variable": [],
+    "builtInVariable": [
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_URL",
+        "name": "Page URL"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_HOSTNAME",
+        "name": "Page Hostname"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_PATH",
+        "name": "Page Path"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "REFERRER",
+        "name": "Referrer"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "EVENT",
+        "name": "Event"
+      }
+    ],
+    "fingerprint": "1745621784595",
+    "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6050054095/containers/95073763/versions/0?apiLink=version"
+  }
+}

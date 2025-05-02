@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Offcanvas, Badge, Accordion, Table, InputGroup, Modal, Form } from "react-bootstrap";
 
+import CreateEvent from "./GTMExports/SampleEventCode";
 // import widget/custom components
 import { PageHeading } from "widgets";
 
@@ -32,9 +33,9 @@ interface GTMExport {
     };
     tagManagerUrl: string;
     tag: GTMTags[];
-    trigger: GTMTags[];
-    variable: GTMTags[];
-    builtInVariable: GTMTags[];
+    trigger: GTMTriggers[];
+    variable: GTMVariables[];
+    builtInVariable: GTMBuiltInVariables[];
   };
 }
 interface GTMTags {
@@ -104,6 +105,7 @@ interface GTMBuiltInVariables {
 }
 
 const EventGTM = () => {
+  console.log(CreateEvent({ name: "TestEvent" }));
   const sid = "756B5036644F706C4F6A4D3D";
   const oid = "504E6F37515941744B34633D";
   // State for controlling the offcanvas
@@ -243,20 +245,25 @@ const EventGTM = () => {
         <Accordion.Item eventKey={eventCode.tagId}>
           <Accordion.Header>Variables for this event</Accordion.Header>
           <Accordion.Body>
-            <div className='d-flex flex-wrap gap-2'>
-              {templateVariables.map((variable: string, i: number) => (
-                <span className='font-size-12' key={`tpl-${i}`}>
-                  {variable}
-                  {i < templateVariables.length - 1 ? ", " : ""}
-                </span>
-              ))}
-              {omParameters.map((param: string, i: number) => (
-                <span className='font-size-12' key={`om-${i}`}>
-                  OM.{param}
-                  {i < omParameters.length - 1 ? ", " : ""}
-                </span>
-              ))}
-            </div>
+            <Row>
+              {/* <Table size='sm' bordered hover>
+                {templateVariables.map((variable: string, i: number) => (
+                  <span className='font-size-12' key={`tpl-${i}`}>
+                    {variable}
+                    {i < templateVariables.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+                {omParameters.map((param: string, i: number) => (
+                  <span className='font-size-12' key={`om-${i}`}>
+                    OM.{param}
+                    {i < omParameters.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </Table> */}
+              <Button size='sm' variant='secondary'>
+                <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Variable
+              </Button>
+            </Row>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
@@ -392,7 +399,11 @@ const EventGTM = () => {
           )}
         </Offcanvas.Body>
       </Offcanvas>
+
       {renderNewTagModal()}
+      <div className='d-grid gap-2 d-md-flex justify-content-md-end my-2'>
+        <Button>Create GTM Export</Button>
+      </div>
     </Container>
   );
 };
