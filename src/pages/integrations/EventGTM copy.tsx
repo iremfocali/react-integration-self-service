@@ -8,6 +8,7 @@ import CreateEvent from "./GTMExports/SampleEventCode";
 import { PageHeading } from "widgets";
 
 import SampleGTMExport from "../../data/JSONFiles/SampleGTMExport.json";
+// import SampleGTMExport from "./GTMExports/BaseTemplate.json";
 
 interface GTMExport {
   exportFormatVersion: number;
@@ -105,12 +106,13 @@ interface GTMBuiltInVariables {
 }
 
 const EventGTM = () => {
-  console.log(CreateEvent({ name: "TestEvent" }));
   const sid = "756B5036644F706C4F6A4D3D";
   const oid = "504E6F37515941744B34633D";
   // State for controlling the offcanvas
-  const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<GTMTags | null>(null);
+  const [newTrigger, setNewTrigger] = useState<GTMTriggers | null>(null);
+  const [newVariable, setNewVariable] = useState<GTMVariables | null>(null);
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [offcanvasWidth, setOffcanvasWidth] = useState("40%");
   const [showAddTagModal, setShowAddTagModal] = useState(false);
   const [newTag, setNewTag] = useState({
@@ -235,7 +237,6 @@ const EventGTM = () => {
       </Accordion>
     );
   };
-  // Type assertion for the imported JSON
 
   const renderVariablesAccordion = (eventCode: GTMTags) => {
     const { templateVariables, omParameters } = findVariables(eventCode.parameter[0].value);
@@ -246,7 +247,9 @@ const EventGTM = () => {
           <Accordion.Header>Variables for this event</Accordion.Header>
           <Accordion.Body>
             <Row>
-              {/* <Table size='sm' bordered hover>
+              {
+                // to use this element, wee need to update our event codes
+                /* <Table size='sm' bordered hover>
                 {templateVariables.map((variable: string, i: number) => (
                   <span className='font-size-12' key={`tpl-${i}`}>
                     {variable}
@@ -259,7 +262,8 @@ const EventGTM = () => {
                     {i < omParameters.length - 1 ? ", " : ""}
                   </span>
                 ))}
-              </Table> */}
+              </Table> */
+              }
               <Button size='sm' variant='secondary'>
                 <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Variable
               </Button>
@@ -323,6 +327,39 @@ const EventGTM = () => {
               <Form.Label className='col-sm-3 mb-0'>Tag Name</Form.Label>
               <div className='col-sm-9'>
                 <Form.Control type='text' value={newTag.name} onChange={(e) => setNewTag({ ...newTag, name: e.target.value })} placeholder='Enter tag name' />
+              </div>
+            </Form.Group>
+
+            <Form.Group className='mb-3 row align-items-center'>
+              <Form.Label className='col-sm-3 mb-0'>Trigger</Form.Label>
+              <div className='col-sm-9 d-flex align-items-center justify-content-start'>
+                <Form.Select className='me-2' value={newTag.triggers} onChange={(e) => setNewTag({ ...newTag, triggers: e.target.value })}>
+                  {SampleGTMExport.containerVersion.trigger.map((trigger) => (
+                    <option key={trigger.triggerId} value={trigger.name}>
+                      {trigger.name}
+                    </option>
+                  ))}
+                </Form.Select>
+                <Button variant='secondary' className='text-nowrap'>
+                  <i className='fe fe-plus me-1 d-none d-sm-inline'></i>
+                  Add Trigger
+                </Button>
+              </div>
+            </Form.Group>
+            <Form.Group className='mb-3 row align-items-center'>
+              <Form.Label className='col-sm-3 mb-0'>Variable</Form.Label>
+              <div className='col-sm-9 d-flex align-items-center justify-content-start'>
+                <Form.Select className='me-2' value={newTag.variables} onChange={(e) => setNewTag({ ...newTag, variables: e.target.value })}>
+                  {SampleGTMExport.containerVersion.variable.map((variable) => (
+                    <option key={variable.variableId} value={variable.name}>
+                      {variable.name}
+                    </option>
+                  ))}
+                </Form.Select>
+                <Button variant='secondary' className='text-nowrap'>
+                  <i className='fe fe-plus me-1 d-none d-sm-inline'></i>
+                  Add Variable
+                </Button>
               </div>
             </Form.Group>
           </Form>
