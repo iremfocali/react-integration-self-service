@@ -89,21 +89,25 @@ export default function CreateEvent(tagParams: TagParams) {
   }
 </script>`;
 
-  function escapeForGTM(input: string): string {
-    return (
-      input
-        // Escape backslashes first in case they exist
-        // .replace(/\\/g, "\\\\")
-        // Escape double quotes
-        .replace(/"/g, '\\"')
-        // Escape single quotes (if needed)
-        // .replace(/'/g, "\\'")
-        // Replace real newline characters with the literal "\n"
-        .replace(/\n/g, "\\n")
-    );
-  }
-
   return escapeForGTM(tagCode);
-  // return tagCode;
-  // return JSON.stringify(tagCode);
+}
+
+export function VariableToArray() {
+  const variableCode = `function(){\n  var purchaseProductID = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductID.push(product.id);\n  });\n  return purchaseProductID;\n}`;
+  return variableCode;
+}
+
+//helper function for string escapes
+function escapeForGTM(input: string): string {
+  return (
+    input
+      // Escape backslashes first in case they exist
+      // .replace(/\\/g, "\\\\")
+      // Escape double quotes
+      .replace(/"/g, '\\"')
+      // Escape single quotes (if needed)
+      // .replace(/'/g, "\\'")
+      // Replace real newline characters with the literal "\n"
+      .replace(/\n/g, "\\n")
+  );
 }

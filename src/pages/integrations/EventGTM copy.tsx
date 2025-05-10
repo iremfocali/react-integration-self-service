@@ -228,9 +228,6 @@ const EventGTM = () => {
                   </tr>
                 </tbody>
               </Table>
-              <Button size='sm' variant='secondary'>
-                <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Trigger
-              </Button>
             </Row>
           </Accordion.Body>
         </Accordion.Item>
@@ -264,9 +261,6 @@ const EventGTM = () => {
                 ))}
               </Table> */
               }
-              <Button size='sm' variant='secondary'>
-                <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Variable
-              </Button>
             </Row>
           </Accordion.Body>
         </Accordion.Item>
@@ -342,7 +336,7 @@ const EventGTM = () => {
                 </Form.Select>
                 <Button variant='secondary' className='text-nowrap'>
                   <i className='fe fe-plus me-1 d-none d-sm-inline'></i>
-                  Add Trigger
+                  Add Triggers
                 </Button>
               </div>
             </Form.Group>
@@ -358,7 +352,7 @@ const EventGTM = () => {
                 </Form.Select>
                 <Button variant='secondary' className='text-nowrap'>
                   <i className='fe fe-plus me-1 d-none d-sm-inline'></i>
-                  Add Variable
+                  Add Variables
                 </Button>
               </div>
             </Form.Group>
