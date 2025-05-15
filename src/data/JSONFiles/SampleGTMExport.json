@@ -1,1295 +1,1295 @@
 {
-	"exportFormatVersion": 2,
-	"exportTime": "2025-04-25 22:56:24",
-	"containerVersion": {
-		"path": "accounts/6050054095/containers/95073763/versions/0",
-		"accountId": "6050054095",
-		"containerId": "95073763",
-		"containerVersionId": "0",
-		"container": {
-			"path": "accounts/6050054095/containers/95073763",
-			"accountId": "6050054095",
-			"containerId": "95073763",
-			"name": "VisilabsHealthVersion",
-			"publicId": "GTM-NWNPZG6",
-			"usageContext": ["WEB"],
-			"fingerprint": "1665602934146",
-			"tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6050054095/containers/95073763/workspaces?apiLink=container",
-			"features": {
-				"supportUserPermissions": true,
-				"supportEnvironments": true,
-				"supportWorkspaces": true,
-				"supportGtagConfigs": false,
-				"supportBuiltInVariables": true,
-				"supportClients": false,
-				"supportFolders": true,
-				"supportTags": true,
-				"supportTemplates": true,
-				"supportTriggers": true,
-				"supportVariables": true,
-				"supportVersions": true,
-				"supportZones": true,
-				"supportTransformations": false
-			},
-			"tagIds": ["GTM-NWNPZG6"]
-		},
-		"tag": [
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "45",
-				"name": "RMC-CartView",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\n  function onProductBasketLoaded() {\n    var tagVars = {\n      \"OM.pbid\": {{RMC-ecommerce.cart.basket_id}},\n      \"OM.pb\": {{RMC-CartArray-PB-JS}},\n      \"OM.pu\": {{RMC-CartArray-PU-JS}},\n      \"OM.ppr\": {{RMC-CartArray-PPR-JS}},\n      \"OM.pbt\": {{RMC-CartArray-PBT-JS}}\n    };\n\n    var isCollected = false;\n    var VL = new Visilabs();\n\n    if (checkException(tagVars)) {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductBasket\");\n      VL.Collect();\n    } else {\n      VL.AddParameter(\"OM.pbid\", {{RMC-ecommerce.cart.basket_id}});\n      VL.AddParameter(\"OM.pb\", {{RMC-CartArray-PB-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.pu\", {{RMC-CartArray-PU-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.ppr\", {{RMC-CartArray-PPR-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.pbt\", {{RMC-CartArray-PBT-JS}});\n    }\n\n    if (!isCollected) {\n      VL.Collect();\n    }\n\n    VL.SuggestActions();\n\n    function checkException(tagVars) {\n      var exceptionArray = [\"null\", \"undefined\", \"\"];\n      var exception = false;\n      for (var el in tagVars) {\n        if (Array.isArray(tagVars[el])) {\n          for (var i = 0; i < tagVars[el].length; i++) {\n            if (exceptionArray.includes(tagVars[el][i])) {\n              exception = true;\n              break;\n            }\n          }\n        } else if (!tagVars[el] || exceptionArray.includes(tagVars[el])) {\n          exception = true;\n          break;\n        }\n      }\n      return exception;\n    }\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onProductBasketLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onProductBasketLoaded();\n  }\n</script>"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1678178708796",
-				"firingTriggerId": ["22"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "46",
-				"name": "RMC-Login",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\n  function onLoginLoaded() {\n    var userid = {{RMC-UserID}};\n    var VL = new Visilabs();\n    var exceptionArray = [\"null\", \"undefined\", \"\"];\n\n    if (userid && !exceptionArray.includes(userid)) {\n      VL.AddParameter(\"OM.exVisitorID\", userid);\n      VL.AddParameter(\"OM.b_login\", \"1\");\n    } else {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"Login\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onLoginLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onLoginLoaded();\n  }\n</script>"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1669630156918",
-				"firingTriggerId": ["31"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "49",
-				"name": "RMC-Purchase",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsPurchaseLoaded() {\n    var tid = {{RMC-ecommerce.checkout.purchase_id}};\n    var ppArray = {{RMC-PurchaseArray-PP-JS}};\n    var puArray = {{RMC-PurchaseArray-PU-JS}};\n    var pprArray = {{RMC-PurchaseArray-PPR-JS}};\n    var pp = ppArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var ppt = {{RMC-PurchaseArray-PPT-JS}};\n    var userid = {{RMC-ecommerce.checkout.vl_userID}};\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < ppArray.length; index++) {\n        var ppti = ppArray[index];\n        var puti = puArray[index];\n        var pprti = pprArray[index];\n        if (!tid || !ppti || !userid || !puti || !pprti || exceptionArray.includes(userid) || exceptionArray.includes(ppti) || isNaN(puti) || isNaN(pprti)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductPurchase\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.tid\", tid);\n        VL.AddParameter(\"OM.pp\", pp);\n        VL.AddParameter(\"OM.pu\", pu);\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.ppt\", ppt);\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPurchaseLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPurchaseLoaded();\n</script>"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1676631058141",
-				"firingTriggerId": ["32"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+  "exportFormatVersion": 2,
+  "exportTime": "2025-04-25 22:56:24",
+  "containerVersion": {
+    "path": "accounts/6050054095/containers/95073763/versions/0",
+    "accountId": "6050054095",
+    "containerId": "95073763",
+    "containerVersionId": "0",
+    "container": {
+      "path": "accounts/6050054095/containers/95073763",
+      "accountId": "6050054095",
+      "containerId": "95073763",
+      "name": "VisilabsHealthVersion",
+      "publicId": "GTM-NWNPZG6",
+      "usageContext": ["WEB"],
+      "fingerprint": "1665602934146",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6050054095/containers/95073763/workspaces?apiLink=container",
+      "features": {
+        "supportUserPermissions": true,
+        "supportEnvironments": true,
+        "supportWorkspaces": true,
+        "supportGtagConfigs": false,
+        "supportBuiltInVariables": true,
+        "supportClients": false,
+        "supportFolders": true,
+        "supportTags": true,
+        "supportTemplates": true,
+        "supportTriggers": true,
+        "supportVariables": true,
+        "supportVersions": true,
+        "supportZones": true,
+        "supportTransformations": false
+      },
+      "tagIds": ["GTM-NWNPZG6"]
+    },
+    "tag": [
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "45",
+        "name": "RMC-CartView",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\n  function onProductBasketLoaded() {\n    var tagVars = {\n      \"OM.pbid\": {{RMC-ecommerce.cart.basket_id}},\n      \"OM.pb\": {{RMC-CartArray-PB-JS}},\n      \"OM.pu\": {{RMC-CartArray-PU-JS}},\n      \"OM.ppr\": {{RMC-CartArray-PPR-JS}},\n      \"OM.pbt\": {{RMC-CartArray-PBT-JS}}\n    };\n\n    var isCollected = false;\n    var VL = new Visilabs();\n\n    if (checkException(tagVars)) {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductBasket\");\n      VL.Collect();\n    } else {\n      VL.AddParameter(\"OM.pbid\", {{RMC-ecommerce.cart.basket_id}});\n      VL.AddParameter(\"OM.pb\", {{RMC-CartArray-PB-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.pu\", {{RMC-CartArray-PU-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.ppr\", {{RMC-CartArray-PPR-JS}}.join(\";\"));\n      VL.AddParameter(\"OM.pbt\", {{RMC-CartArray-PBT-JS}});\n    }\n\n    if (!isCollected) {\n      VL.Collect();\n    }\n\n    VL.SuggestActions();\n\n    function checkException(tagVars) {\n      var exceptionArray = [\"null\", \"undefined\", \"\"];\n      var exception = false;\n      for (var el in tagVars) {\n        if (Array.isArray(tagVars[el])) {\n          for (var i = 0; i < tagVars[el].length; i++) {\n            if (exceptionArray.includes(tagVars[el][i])) {\n              exception = true;\n              break;\n            }\n          }\n        } else if (!tagVars[el] || exceptionArray.includes(tagVars[el])) {\n          exception = true;\n          break;\n        }\n      }\n      return exception;\n    }\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onProductBasketLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onProductBasketLoaded();\n  }\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1678178708796",
+        "firingTriggerId": ["22"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "46",
+        "name": "RMC-Login",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\n  function onLoginLoaded() {\n    var userid = {{RMC-UserID}};\n    var VL = new Visilabs();\n    var exceptionArray = [\"null\", \"undefined\", \"\"];\n\n    if (userid && !exceptionArray.includes(userid)) {\n      VL.AddParameter(\"OM.exVisitorID\", userid);\n      VL.AddParameter(\"OM.b_login\", \"1\");\n    } else {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"Login\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onLoginLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onLoginLoaded();\n  }\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1669630156918",
+        "firingTriggerId": ["31"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "49",
+        "name": "RMC-Purchase",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPurchaseLoaded() {\n    var tid = {{RMC-ecommerce.checkout.purchase_id}};\n    var ppArray = {{RMC-PurchaseArray-PP-JS}};\n    var puArray = {{RMC-PurchaseArray-PU-JS}};\n    var pprArray = {{RMC-PurchaseArray-PPR-JS}};\n    var pp = ppArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var ppt = {{RMC-PurchaseArray-PPT-JS}};\n    var userid = {{RMC-ecommerce.checkout.vl_userID}};\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < ppArray.length; index++) {\n        var ppti = ppArray[index];\n        var puti = puArray[index];\n        var pprti = pprArray[index];\n        if (!tid || !ppti || !userid || !puti || !pprti || exceptionArray.includes(userid) || exceptionArray.includes(ppti) || isNaN(puti) || isNaN(pprti)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductPurchase\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.tid\", tid);\n        VL.AddParameter(\"OM.pp\", pp);\n        VL.AddParameter(\"OM.pu\", pu);\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.ppt\", ppt);\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPurchaseLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPurchaseLoaded();\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1676631058141",
+        "firingTriggerId": ["32"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "50",
-				"name": "RMC-PageView",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsPageLoaded(){\n var vl = new Visilabs();\n vl.Collect();\n vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPageLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPageLoaded();\n</script>"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1669630176882",
-				"firingTriggerId": ["7"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "50",
+        "name": "RMC-PageView",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPageLoaded(){\n var vl = new Visilabs();\n vl.Collect();\n vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPageLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPageLoaded();\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1669630176882",
+        "firingTriggerId": ["7"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "51",
-				"name": "RMC-SearchView",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsSearchLoaded() {\n    var search = {{RMC-Search}}\n    var VL = new Visilabs();\n    if (search && search.word) {\n        VL.AddParameter(\"OM.OSS\", search.word);\n        if (search.result) {\n            VL.AddParameter(\"OM.OSSR\", search.result);\n        }\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"OnSiteSearch\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSearchLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSearchLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1678178905658",
-				"firingTriggerId": ["24"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "51",
+        "name": "RMC-SearchView",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSearchLoaded() {\n    var search = {{RMC-Search}}\n    var VL = new Visilabs();\n    if (search && search.word) {\n        VL.AddParameter(\"OM.OSS\", search.word);\n        if (search.result) {\n            VL.AddParameter(\"OM.OSSR\", search.result);\n        }\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"OnSiteSearch\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSearchLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSearchLoaded();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1678178905658",
+        "firingTriggerId": ["24"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "52",
-				"name": "RMC-AddFav",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsAddFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsAddFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsAddFavLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1678178600563",
-				"firingTriggerId": ["4"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "52",
+        "name": "RMC-AddFav",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsAddFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsAddFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsAddFavLoaded();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1678178600563",
+        "firingTriggerId": ["4"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "53",
-				"name": "RMC-CategoryView",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsCategoryLoaded() {\n    var clist = {{RMC-CategoryID}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (clist && !exceptionArray.includes(clist)) {\n        vl.AddParameter(\"OM.clist\", clist);\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"CategoryView\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCategoryLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCategoryLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1673265676225",
-				"firingTriggerId": ["20"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "53",
+        "name": "RMC-CategoryView",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsCategoryLoaded() {\n    var clist = {{RMC-CategoryID}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (clist && !exceptionArray.includes(clist)) {\n        vl.AddParameter(\"OM.clist\", clist);\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"CategoryView\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCategoryLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCategoryLoaded();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1673265676225",
+        "firingTriggerId": ["20"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "54",
-				"name": "RMC-SignUp",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsSignupLoaded() {\n    var userid = {{RMC-UserID}};\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        vl.AddParameter(\"OM.exVisitorID\", userid);\n        vl.AddParameter(\"OM.b_sgnp\", \"1\");\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"SignUp\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSignupLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSignupLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1676452441739",
-				"firingTriggerId": ["17"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "54",
+        "name": "RMC-SignUp",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSignupLoaded() {\n    var userid = {{RMC-UserID}};\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        vl.AddParameter(\"OM.exVisitorID\", userid);\n        vl.AddParameter(\"OM.b_sgnp\", \"1\");\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"SignUp\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSignupLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSignupLoaded();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1676452441739",
+        "firingTriggerId": ["17"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "55",
-				"name": "RMC-ProductView",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsProductLoaded() {\n    var product = {{RMC-ecommerce.detail.product}}\n    var vl = new Visilabs();\n    \n    var exceptionArray = ['null', 'undefined', ''];\n    if(product && product.id && product.name && product.price && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.name) && !isNaN(product.price)){\n        vl.AddParameter(\"OM.pv\", product.id);\n        vl.AddParameter(\"OM.pn\", product.name);\n        vl.AddParameter(\"OM.ppr\", product.price);\n        if(product.stock && !isNaN(product.stock)){\n            vl.AddParameter(\"OM.inv\", product.stock);\n        }\n        if(product.brand && !exceptionArray.includes(product.brand)){\n            vl.AddParameter(\"OM.pv.1\", product.brand);\n        }\n        if(product.category && !exceptionArray.includes(product.category)){\n            vl.AddParameter(\"OM.cat\", product.category);\n        }\n    }else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductView\");\n      var url=window.location.href;\n      vl.AddParameter(\"OM.pageUrl\", url);\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsProductLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsProductLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1741189558121",
-				"firingTriggerId": ["28"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "55",
+        "name": "RMC-ProductView",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsProductLoaded() {\n    var vl = new Visilabs();\n\n    var exceptionArray = ['null', 'undefined', ''];\n    if({{RMC-ecommerce.detail.product}} && {{RMC-ecommerce.detail.product}}.id && {{RMC-ecommerce.detail.product}}.name && {{RMC-ecommerce.detail.product}}.price && !exceptionArray.includes({{RMC-ecommerce.detail.product}}.id) && !exceptionArray.includes({{RMC-ecommerce.detail.product}}.name) && !isNaN({{RMC-ecommerce.detail.product}}.price)){\n        vl.AddParameter(\"OM.pv\", {{RMC-ecommerce.detail.product}}.id);\n        vl.AddParameter(\"OM.pn\", {{RMC-ecommerce.detail.product}}.name);\n        vl.AddParameter(\"OM.ppr\", {{RMC-ecommerce.detail.product}}.price);\n        if({{RMC-ecommerce.detail.product}}.stock && !isNaN({{RMC-ecommerce.detail.product}}.stock)){\n            vl.AddParameter(\"OM.inv\", {{RMC-ecommerce.detail.product}}.stock);\n        }\n        if({{RMC-ecommerce.detail.product}}.brand && !exceptionArray.includes({{RMC-ecommerce.detail.product}}.brand)){\n            vl.AddParameter(\"OM.pv.1\", {{RMC-ecommerce.detail.product}}.brand);\n        }\n        if({{RMC-ecommerce.detail.product}}.category && !exceptionArray.includes({{RMC-ecommerce.detail.product}}.category)){\n            vl.AddParameter(\"OM.cat\", {{RMC-ecommerce.detail.product}}.category);\n        }\n    }else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductView\");\n        var url=window.location.href;\n        vl.AddParameter(\"OM.pageUrl\", url);\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsProductLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsProductLoaded();\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1741189558121",
+        "firingTriggerId": ["28"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "56",
-				"name": "RMC-RemoveFav",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script type=\"text/javascript\">\nfunction OnVisilabsRemoveFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"-1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsRemoveFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsRemoveFavLoaded();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1678178884104",
-				"firingTriggerId": ["14"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "56",
+        "name": "RMC-RemoveFav",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsRemoveFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"-1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsRemoveFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsRemoveFavLoaded();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1678178884104",
+        "firingTriggerId": ["14"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
 
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "58",
-				"name": "RMC - ControlEventRequest",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "<script>\nfunction HealthTrigger(){\n    var VL = new Visilabs();\n    var loginRule =document.querySelector(\".user-name\"); // Sayfa da giriş yapıp yada kayıt olduktan sonra gelen merhaba yada user isimini içeren HTML elemanı\n    var url=document.location.href; // Sayfa URL i \n    var path=document.location.pathname; // Sayfa Path i\n    var elemProduct= document.querySelector(\".product-page\"); // Product sayfasını belirleyen Eleman yada URL bilgisi\n    var elemCategory= document.querySelector(\".list__body\"); // Category sayfasını belirleyen Eleman yada URL bilgisi\n    \n    \n    if(loginRule && VisiParameters[\"OM.exvisitorID\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Login or Sign Up\");\n        console.log(\"Login Signup eventinde hata var\");\n    }\n    \n    if(elemProduct && !VisiParameters[\"OM.pv\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product View\");\n        console.log(\"Product view eventinde hata var\");\n    }\n    \n    if(elemCategory && !VisiParameters[\"OM.clist\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Category Page View\");\n        console.log(\"Category view eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/baskets/basket/\") &&!VisiParameters[\"OM.pbid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Produt Basket\");\n        console.log(\"CartView eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/orders/completed/\") &&!VisiParameters[\"OM.tid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product Purchase\");\n        console.log(\"Purchase eventinde hata var\");\n    }\n    \n    if(url.includes(\"search_text\") && !VisiParameters[\"OM.OSS\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"On Site Search\");\n        console.log(\"Search eventinde hata var\");\n    }\n    \nVL.Collect();\nVL.SuggestActions();\n}\n    \n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = HealthTrigger;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else HealthTrigger();\n</script>\n"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1701955779145",
-				"firingTriggerId": ["57"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"tagId": "61",
-				"name": "İrem Test",
-				"type": "html",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "html",
-						"value": "\n<script type=\"text/javascript\">\n  function onTestEventLoaded() {\n    var tagVars = \n  \"OM.pbid\": {{RMC-ecommerce.cart.basket_id}},\n  \"OM.pb\": {{RMC-CartArray-PB-JS}},\n  \"OM.pu\": {{RMC-CartArray-PU-JS}},\n  \"OM.ppr\": {{RMC-CartArray-PPR-JS}},\n  \"OM.pbt\": {{RMC-CartArray-PBT-JS}}\n};\n        \n    var isCollected = false;\n    var VL = new Visilabs();\n\n    if (checkException(tagVars)) {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"TestEvent\");\n      VL.Collect();\n    } else {\n      VL.AddParameter(\"OM.pbid\", {{RMC-ecommerce.cart.basket_id}});\nVL.AddParameter(\"OM.pb\", {{RMC-CartArray-PB-JS}}.join(\";\"));\nVL.AddParameter(\"OM.pu\", {{RMC-CartArray-PU-JS}}.join(\";\"));\nVL.AddParameter(\"OM.ppr\", {{RMC-CartArray-PPR-JS}}.join(\";\"));\nVL.AddParameter(\"OM.pbt\", {{RMC-CartArray-PBT-JS}});\n    }\n\n    if (!isCollected) {\n      VL.Collect();\n    }\n\n    VL.SuggestActions();\n\n    function checkException(tagVars) {\n      var exceptionArray = [\"null\", \"undefined\", \"\"];\n      var exception = false;\n      for (var el in tagVars) {\n        if (typeof tagVars[el] == Array) {\n          for (var i = 0; i < tagVars[el].length; i++) {\n            if (exceptionArray.includes(tagVars[el][i])) {\n              exception = true;\n              break;\n            }\n          }\n        } else if (!tagVars[el] || exceptionArray.includes(tagVars[el])) {\n          exception = true;\n          break;\n        }\n      }\n      return exception;\n    }\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onTestEventLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onTestEventLoaded();\n  }\n</script>"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "supportDocumentWrite",
-						"value": "false"
-					}
-				],
-				"fingerprint": "1701955237260",
-				"firingTriggerId": ["2147479553"],
-				"tagFiringOption": "ONCE_PER_EVENT",
-				"monitoringMetadata": {
-					"type": "MAP"
-				},
-				"consentSettings": {
-					"consentStatus": "NOT_SET"
-				}
-			}
-		],
-		"trigger": [
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "4",
-				"name": "RMC-AddFav-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-AddFav"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106158"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "7",
-				"name": "RMC-Pageview-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-PageView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106159"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "14",
-				"name": "RMC-RemoveFav-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-RemoveFav"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106160"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "17",
-				"name": "RMC-SignUp-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-Signup"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106161"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "20",
-				"name": "RMC-CategoryView-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-CategoryView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106162"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "22",
-				"name": "RMC-CartView-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-CartView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106162"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "24",
-				"name": "RMC-SearchView-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-SearchResultView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106162"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "28",
-				"name": "RMC-ProductView-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-ProductDetailView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106164"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "31",
-				"name": "RMC-Login-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-Login"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106164"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "32",
-				"name": "RMC-Purchase-Trigger",
-				"type": "CUSTOM_EVENT",
-				"customEventFilter": [
-					{
-						"type": "EQUALS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{_event}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "vlEvent"
-							}
-						]
-					}
-				],
-				"filter": [
-					{
-						"type": "CONTAINS",
-						"parameter": [
-							{
-								"type": "TEMPLATE",
-								"key": "arg0",
-								"value": "{{RMC-Label}}"
-							},
-							{
-								"type": "TEMPLATE",
-								"key": "arg1",
-								"value": "VL-PurchaseView"
-							}
-						]
-					}
-				],
-				"fingerprint": "1665603106164"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"triggerId": "57",
-				"name": "RMC - ControlTrigger",
-				"type": "WINDOW_LOADED",
-				"fingerprint": "1667642626017"
-			}
-		],
-		"variable": [
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "5",
-				"name": "RMC-ecommerce.checkout.products",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.checkout.products"
-					}
-				],
-				"fingerprint": "1665603106158",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "6",
-				"name": "RMC-sid",
-				"type": "c",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "value",
-						"value": "756B5036644F706C4F6A4D3D"
-					}
-				],
-				"fingerprint": "1665603106158",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "8",
-				"name": "RMC-oid",
-				"type": "c",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "value",
-						"value": "504E6F37515941744B34633D"
-					}
-				],
-				"fingerprint": "1665603106159",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "10",
-				"name": "RMC-ecommerce.cart.basket_id",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.cart.basket_id"
-					}
-				],
-				"fingerprint": "1665603106160",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "11",
-				"name": "RMC-Product",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_product"
-					}
-				],
-				"fingerprint": "1665603106160",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "13",
-				"name": "RMC_ecommerce.cart.products",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.cart.products"
-					}
-				],
-				"fingerprint": "1665603106160",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "16",
-				"name": "RMC-UserID",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_userID"
-					}
-				],
-				"fingerprint": "1665603106161",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "19",
-				"name": "RMC-Search",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_search"
-					}
-				],
-				"fingerprint": "1665603106161",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "25",
-				"name": "RMC-ecommerce.checkout.vl_userID",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.checkout.vl_userID"
-					}
-				],
-				"fingerprint": "1665603106163",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "26",
-				"name": "RMC-CategoryID",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_category_id"
-					}
-				],
-				"fingerprint": "1665603106163",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "27",
-				"name": "RMC-ecommerce.detail.product",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.detail.product"
-					}
-				],
-				"fingerprint": "1665603106163",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "34",
-				"name": "RMC-ecommerce.checkout.purchase_id",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_ecommerce.checkout.purchase_id"
-					}
-				],
-				"fingerprint": "1665603106165",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "36",
-				"name": "RMC-Label",
-				"type": "v",
-				"parameter": [
-					{
-						"type": "INTEGER",
-						"key": "dataLayerVersion",
-						"value": "2"
-					},
-					{
-						"type": "BOOLEAN",
-						"key": "setDefaultValue",
-						"value": "false"
-					},
-					{
-						"type": "TEMPLATE",
-						"key": "name",
-						"value": "vl_label"
-					}
-				],
-				"fingerprint": "1673125773491",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "39",
-				"name": "RMC-PurchaseArray-PP-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var purchaseProductID = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductID.push(product.id);\n  });\n  return purchaseProductID;\n}"
-					}
-				],
-				"fingerprint": "1669017801126",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "40",
-				"name": "RMC-CartArray-PPR-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var cartProductPrice = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductPrice.push(parseFloat(product.qty) * parseFloat(product.price));\n  });\n  return cartProductPrice;\n}"
-					}
-				],
-				"fingerprint": "1669017613924",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "41",
-				"name": "RMC-PurchaseArray-PPR-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var purchaseProductPrice = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductPrice.push(parseFloat(product.qty) * parseFloat(product.price));\n  });\n  return purchaseProductPrice;\n}"
-					}
-				],
-				"fingerprint": "1669017832832",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "42",
-				"name": "RMC-CartArray-PU-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var cartProductQty = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductQty.push(product.qty);\n  });\n  return cartProductQty;\n}"
-					}
-				],
-				"fingerprint": "1669017620142",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "43",
-				"name": "RMC-CartArray-PBT-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var cartTotalPrice = 0;\n  {{RMC-CartArray-PPR-JS}}.forEach(function(price){\n    cartTotalPrice += Number(price);\n  });\n  return cartTotalPrice;\n}"
-					}
-				],
-				"fingerprint": "1669017608512",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "44",
-				"name": "RMC-CartArray-PB-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var cartProductID = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductID.push(product.id);\n  });\n  return cartProductID;\n}"
-					}
-				],
-				"fingerprint": "1673125747439",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "47",
-				"name": "RMC-PurchaseArray-PU-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var purchaseProductQty = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductQty.push(Number(product.qty));\n  });\n  return purchaseProductQty;\n}"
-					}
-				],
-				"fingerprint": "1669017837669",
-				"formatValue": {}
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"variableId": "48",
-				"name": "RMC-PurchaseArray-PPT-JS",
-				"type": "jsm",
-				"parameter": [
-					{
-						"type": "TEMPLATE",
-						"key": "javascript",
-						"value": "function(){\n  var purchaseTotalPrice = 0;\n  {{RMC-PurchaseArray-PPR-JS}}.forEach(function(price){\n    purchaseTotalPrice += Number(price);\n  });\n  return purchaseTotalPrice;\n}"
-					}
-				],
-				"fingerprint": "1669017828048",
-				"formatValue": {}
-			}
-		],
-		"builtInVariable": [
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"type": "PAGE_URL",
-				"name": "Page URL"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"type": "PAGE_HOSTNAME",
-				"name": "Page Hostname"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"type": "PAGE_PATH",
-				"name": "Page Path"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"type": "REFERRER",
-				"name": "Referrer"
-			},
-			{
-				"accountId": "6050054095",
-				"containerId": "95073763",
-				"type": "EVENT",
-				"name": "Event"
-			}
-		],
-		"fingerprint": "1745621784595",
-		"tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6050054095/containers/95073763/versions/0?apiLink=version"
-	}
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "58",
+        "name": "RMC - ControlEventRequest",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\nfunction HealthTrigger(){\n    var VL = new Visilabs();\n    var loginRule =document.querySelector(\".user-name\"); // Sayfa da giriş yapıp yada kayıt olduktan sonra gelen merhaba yada user isimini içeren HTML elemanı\n    var url=document.location.href; // Sayfa URL i \n    var path=document.location.pathname; // Sayfa Path i\n    var elemProduct= document.querySelector(\".product-page\"); // Product sayfasını belirleyen Eleman yada URL bilgisi\n    var elemCategory= document.querySelector(\".list__body\"); // Category sayfasını belirleyen Eleman yada URL bilgisi\n    \n    \n    if(loginRule && VisiParameters[\"OM.exvisitorID\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Login or Sign Up\");\n        console.log(\"Login Signup eventinde hata var\");\n    }\n    \n    if(elemProduct && !VisiParameters[\"OM.pv\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product View\");\n        console.log(\"Product view eventinde hata var\");\n    }\n    \n    if(elemCategory && !VisiParameters[\"OM.clist\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Category Page View\");\n        console.log(\"Category view eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/baskets/basket/\") &&!VisiParameters[\"OM.pbid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Produt Basket\");\n        console.log(\"CartView eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/orders/completed/\") &&!VisiParameters[\"OM.tid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product Purchase\");\n        console.log(\"Purchase eventinde hata var\");\n    }\n    \n    if(url.includes(\"search_text\") && !VisiParameters[\"OM.OSS\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"On Site Search\");\n        console.log(\"Search eventinde hata var\");\n    }\n    \nVL.Collect();\nVL.SuggestActions();\n}\n    \n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = HealthTrigger;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else HealthTrigger();\n</script>\n"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1701955779145",
+        "firingTriggerId": ["57"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "tagId": "61",
+        "name": "İrem Test",
+        "type": "html",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "\n<script type=\"text/javascript\">\n  function onTestEventLoaded() {\n    var tagVars = \n  \"OM.pbid\": {{RMC-ecommerce.cart.basket_id}},\n  \"OM.pb\": {{RMC-CartArray-PB-JS}},\n  \"OM.pu\": {{RMC-CartArray-PU-JS}},\n  \"OM.ppr\": {{RMC-CartArray-PPR-JS}},\n  \"OM.pbt\": {{RMC-CartArray-PBT-JS}}\n};\n        \n    var isCollected = false;\n    var VL = new Visilabs();\n\n    if (checkException(tagVars)) {\n      VL.AddParameter(\"OM.VLEventException\", \"True\");\n      VL.AddParameter(\"OM.VLEventExceptionName\", \"TestEvent\");\n      VL.Collect();\n    } else {\n      VL.AddParameter(\"OM.pbid\", {{RMC-ecommerce.cart.basket_id}});\nVL.AddParameter(\"OM.pb\", {{RMC-CartArray-PB-JS}}.join(\";\"));\nVL.AddParameter(\"OM.pu\", {{RMC-CartArray-PU-JS}}.join(\";\"));\nVL.AddParameter(\"OM.ppr\", {{RMC-CartArray-PPR-JS}}.join(\";\"));\nVL.AddParameter(\"OM.pbt\", {{RMC-CartArray-PBT-JS}});\n    }\n\n    if (!isCollected) {\n      VL.Collect();\n    }\n\n    VL.SuggestActions();\n\n    function checkException(tagVars) {\n      var exceptionArray = [\"null\", \"undefined\", \"\"];\n      var exception = false;\n      for (var el in tagVars) {\n        if (typeof tagVars[el] == Array) {\n          for (var i = 0; i < tagVars[el].length; i++) {\n            if (exceptionArray.includes(tagVars[el][i])) {\n              exception = true;\n              break;\n            }\n          }\n        } else if (!tagVars[el] || exceptionArray.includes(tagVars[el])) {\n          exception = true;\n          break;\n        }\n      }\n      return exception;\n    }\n  }\n\n  if (typeof Visilabs !== \"function\") {\n    var url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n      \"://vsh.visilabs.net/Visilabs.min.js?sid=\" + \"{{RMC-sid}}\" +\n      \"&oid=\" + \"{{RMC-oid}}\";\n    var script = document.createElement(\"script\");\n    if (location.href.toString().indexOf(\"vldebug=true\") > 0) {\n      url = (location.protocol.indexOf(\"https\") == 0 ? \"https\" : \"http\") +\n        \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\" + \"{{RMC-sid}}\" +\n        \"&oid=\" + \"{{RMC-oid}}\";\n    }\n    script.onload = onTestEventLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n  } else {\n    onTestEventLoaded();\n  }\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "fingerprint": "1701955237260",
+        "firingTriggerId": ["2147479553"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "monitoringMetadata": {
+          "type": "MAP"
+        },
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "trigger": [
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "4",
+        "name": "RMC-AddFav-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-AddFav"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106158"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "7",
+        "name": "RMC-Pageview-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-PageView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106159"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "14",
+        "name": "RMC-RemoveFav-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-RemoveFav"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106160"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "17",
+        "name": "RMC-SignUp-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-Signup"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106161"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "20",
+        "name": "RMC-CategoryView-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-CategoryView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106162"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "22",
+        "name": "RMC-CartView-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-CartView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106162"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "24",
+        "name": "RMC-SearchView-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-SearchResultView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106162"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "28",
+        "name": "RMC-ProductView-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-ProductDetailView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106164"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "31",
+        "name": "RMC-Login-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-Login"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106164"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "32",
+        "name": "RMC-Purchase-Trigger",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "vlEvent"
+              }
+            ]
+          }
+        ],
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{RMC-Label}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "VL-PurchaseView"
+              }
+            ]
+          }
+        ],
+        "fingerprint": "1665603106164"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "triggerId": "57",
+        "name": "RMC - ControlTrigger",
+        "type": "WINDOW_LOADED",
+        "fingerprint": "1667642626017"
+      }
+    ],
+    "variable": [
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "5",
+        "name": "RMC-ecommerce.checkout.products",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.checkout.products"
+          }
+        ],
+        "fingerprint": "1665603106158",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "6",
+        "name": "RMC-sid",
+        "type": "c",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "value",
+            "value": "756B5036644F706C4F6A4D3D"
+          }
+        ],
+        "fingerprint": "1665603106158",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "8",
+        "name": "RMC-oid",
+        "type": "c",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "value",
+            "value": "504E6F37515941744B34633D"
+          }
+        ],
+        "fingerprint": "1665603106159",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "10",
+        "name": "RMC-ecommerce.cart.basket_id",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.cart.basket_id"
+          }
+        ],
+        "fingerprint": "1665603106160",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "11",
+        "name": "RMC-Product",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_product"
+          }
+        ],
+        "fingerprint": "1665603106160",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "13",
+        "name": "RMC_ecommerce.cart.products",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.cart.products"
+          }
+        ],
+        "fingerprint": "1665603106160",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "16",
+        "name": "RMC-UserID",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_userID"
+          }
+        ],
+        "fingerprint": "1665603106161",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "19",
+        "name": "RMC-Search",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_search"
+          }
+        ],
+        "fingerprint": "1665603106161",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "25",
+        "name": "RMC-ecommerce.checkout.vl_userID",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.checkout.vl_userID"
+          }
+        ],
+        "fingerprint": "1665603106163",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "26",
+        "name": "RMC-CategoryID",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_category_id"
+          }
+        ],
+        "fingerprint": "1665603106163",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "27",
+        "name": "RMC-ecommerce.detail.product",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.detail.product"
+          }
+        ],
+        "fingerprint": "1665603106163",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "34",
+        "name": "RMC-ecommerce.checkout.purchase_id",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_ecommerce.checkout.purchase_id"
+          }
+        ],
+        "fingerprint": "1665603106165",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "36",
+        "name": "RMC-Label",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "vl_label"
+          }
+        ],
+        "fingerprint": "1673125773491",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "39",
+        "name": "RMC-PurchaseArray-PP-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var purchaseProductID = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductID.push(product.id);\n  });\n  return purchaseProductID;\n}"
+          }
+        ],
+        "fingerprint": "1669017801126",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "40",
+        "name": "RMC-CartArray-PPR-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var cartProductPrice = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductPrice.push(parseFloat(product.qty) * parseFloat(product.price));\n  });\n  return cartProductPrice;\n}"
+          }
+        ],
+        "fingerprint": "1669017613924",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "41",
+        "name": "RMC-PurchaseArray-PPR-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var purchaseProductPrice = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductPrice.push(parseFloat(product.qty) * parseFloat(product.price));\n  });\n  return purchaseProductPrice;\n}"
+          }
+        ],
+        "fingerprint": "1669017832832",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "42",
+        "name": "RMC-CartArray-PU-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var cartProductQty = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductQty.push(product.qty);\n  });\n  return cartProductQty;\n}"
+          }
+        ],
+        "fingerprint": "1669017620142",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "43",
+        "name": "RMC-CartArray-PBT-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var cartTotalPrice = 0;\n  {{RMC-CartArray-PPR-JS}}.forEach(function(price){\n    cartTotalPrice += Number(price);\n  });\n  return cartTotalPrice;\n}"
+          }
+        ],
+        "fingerprint": "1669017608512",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "44",
+        "name": "RMC-CartArray-PB-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var cartProductID = [];\n  {{RMC_ecommerce.cart.products}}.forEach(function(product){\n    cartProductID.push(product.id);\n  });\n  return cartProductID;\n}"
+          }
+        ],
+        "fingerprint": "1673125747439",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "47",
+        "name": "RMC-PurchaseArray-PU-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var purchaseProductQty = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductQty.push(Number(product.qty));\n  });\n  return purchaseProductQty;\n}"
+          }
+        ],
+        "fingerprint": "1669017837669",
+        "formatValue": {}
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "variableId": "48",
+        "name": "RMC-PurchaseArray-PPT-JS",
+        "type": "jsm",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  var purchaseTotalPrice = 0;\n  {{RMC-PurchaseArray-PPR-JS}}.forEach(function(price){\n    purchaseTotalPrice += Number(price);\n  });\n  return purchaseTotalPrice;\n}"
+          }
+        ],
+        "fingerprint": "1669017828048",
+        "formatValue": {}
+      }
+    ],
+    "builtInVariable": [
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_URL",
+        "name": "Page URL"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_HOSTNAME",
+        "name": "Page Hostname"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "PAGE_PATH",
+        "name": "Page Path"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "REFERRER",
+        "name": "Referrer"
+      },
+      {
+        "accountId": "6050054095",
+        "containerId": "95073763",
+        "type": "EVENT",
+        "name": "Event"
+      }
+    ],
+    "fingerprint": "1745621784595",
+    "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6050054095/containers/95073763/versions/0?apiLink=version"
+  }
 }
