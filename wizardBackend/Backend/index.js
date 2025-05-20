@@ -21,15 +21,15 @@ const pdfEventLabels = ["VL-Login", "VL-Signup", "VL-SearchResultView", "VL-Cate
 app.post("/api/event-check", async (req, res) => {
   const { url, expectedLabel } = req.body;
   if (!url) {
-    return res.status(400).json({ error: "URL zorunludur." });
+    return res.status(400).json({ error: "URL is required." });
   }
 
   try {
     const result = await checkDataLayerEvents(url, expectedLabel);
     res.json(result);
   } catch (error) {
-    console.error("Kontrol sırasında hata:", error);
-    res.status(500).json({ error: error.message || "Bir hata oluştu." });
+    console.error("Error during check:", error);
+    res.status(500).json({ error: error.message || "An error occurred." });
   }
 });
 
@@ -61,7 +61,7 @@ async function checkDataLayerEvents(url, expectedLabel) {
     console.log("Navigating to:", url);
     await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
 
-    // 5 saniye bekle
+    // Wait for 5 seconds
     await new Promise((r) => setTimeout(r, 5000));
 
     let filteredEvents = capturedEvents;
@@ -70,7 +70,7 @@ async function checkDataLayerEvents(url, expectedLabel) {
     }
 
     if (!filteredEvents.length) {
-      return { success: false, message: "Beklenen event(ler) bulunamadı.", events: capturedEvents };
+      return { success: false, message: "Expected event(s) not found.", events: capturedEvents };
     }
 
     return { success: true, events: filteredEvents, allEvents: capturedEvents };
@@ -79,19 +79,19 @@ async function checkDataLayerEvents(url, expectedLabel) {
   }
 }
 
-// Belirli bir event label'ı arayan endpoint
+// Endpoint to search for a specific event label
 app.post("/api/event-search", async (req, res) => {
   const { url, eventLabel } = req.body;
   if (!url || !eventLabel) {
-    return res.status(400).json({ error: "URL ve eventLabel zorunludur." });
+    return res.status(400).json({ error: "URL and eventLabel are required." });
   }
 
   try {
     const result = await searchEventInDataLayer(url, eventLabel);
     res.json(result);
   } catch (error) {
-    console.error("Event arama sırasında hata:", error);
-    res.status(500).json({ error: error.message || "Bir hata oluştu." });
+    console.error("Error during event search:", error);
+    res.status(500).json({ error: error.message || "An error occurred." });
   }
 });
 
@@ -120,10 +120,10 @@ async function searchEventInDataLayer(url, eventLabel) {
     await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
     await new Promise((r) => setTimeout(r, 5000));
 
-    // İstenen event label'ına sahip eventleri bul
+    // Find events with the requested event label
     const foundEvents = capturedEvents.filter((ev) => ev?.vl_label === eventLabel);
     if (foundEvents.length === 0) {
-      return { success: false, message: `Event bulunamadı: ${eventLabel}`, allEvents: capturedEvents };
+      return { success: false, message: `Event not found: ${eventLabel}`, allEvents: capturedEvents };
     }
     return { success: true, count: foundEvents.length, events: foundEvents, allEvents: capturedEvents };
   } finally {
@@ -132,4 +132,4 @@ async function searchEventInDataLayer(url, eventLabel) {
 }
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server çalışıyor: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running at: http://localhost:${PORT}`));

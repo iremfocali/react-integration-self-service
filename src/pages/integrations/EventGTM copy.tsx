@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import node module libraries
-import { useState, useEffect } from "react";
-import { GTMTags, GTMTriggers, GTMVariables } from "./GTMExports/types";
+import { useState, useEffect, useCallback } from "react";
 import { Container, Row, Col, Card, Button, Offcanvas, Badge, Accordion, Table, InputGroup, Modal, Form } from "react-bootstrap";
 
 import CreateEvent from "./GTMExports/SampleEventCode";
@@ -9,7 +8,49 @@ import CreateEvent from "./GTMExports/SampleEventCode";
 import { PageHeading } from "widgets";
 
 import SampleGTMExport from "../../data/JSONFiles/SampleGTMExport.json";
-// import SampleGTMExport from "./GTMExports/BaseTemplate.json";
+
+// Types and Interfaces
+interface GTMTags {
+  tagId: string;
+  name: string;
+  type: string;
+  parameter: Array<{
+    value: string;
+    [key: string]: unknown;
+  }>;
+  firingTriggerId: string[];
+  [key: string]: unknown;
+}
+
+interface GTMTriggers {
+  triggerId: string;
+  name: string;
+  type: string;
+  customEventFilter?: Array<{
+    type: string;
+    parameter: Array<{
+      value: string;
+      [key: string]: unknown;
+    }>;
+  }>;
+  filter?: Array<{
+    type: string;
+    parameter: Array<{
+      value: string;
+      [key: string]: unknown;
+    }>;
+  }>;
+}
+
+interface GTMVariables {
+  variableId: string;
+  name: string;
+  type: string;
+  parameter: Array<{
+    value: string;
+    [key: string]: unknown;
+  }>;
+}
 
 interface DataLayerEvent {
   vl_label?: string;
@@ -27,19 +68,217 @@ interface EventCheckResponse {
   allEvents?: DataLayerEvent[];
 }
 
+interface EventUrlState {
+  url: string;
+  isValid: boolean | null;
+}
+
+interface EventTestState {
+  isLoading: boolean;
+  response: EventCheckResponse | null;
+  error: string | null;
+}
+
+interface EventCardProps {
+  event: GTMTags;
+  eventUrl: EventUrlState;
+  eventTest: EventTestState;
+  onUrlChange: (eventId: string, value: string) => void;
+  onTestEvent: (url: string, eventId: string) => void;
+  onShowCode: (event: GTMTags) => void;
+  onEdit: (event: GTMTags) => void;
+  onRemove: (event: GTMTags) => void;
+}
+
+// EventCard Component
+const EventCard = ({ event, eventUrl, eventTest, onUrlChange, onTestEvent, onShowCode, onEdit, onRemove }: EventCardProps) => {
+  const getUrlInputClass = () => {
+    if (!eventUrl || eventUrl.isValid === null) return "form-control rounded-start";
+    return `form-control ${eventUrl.isValid ? "is-valid" : "is-invalid"} rounded-start`;
+  };
+
+  const renderTriggerAccordion = (triggerId: string) => {
+    const trigger = SampleGTMExport.containerVersion.trigger.find((t) => t.triggerId === triggerId);
+    return (
+      <Accordion className='mb-2' key={triggerId}>
+        <Accordion.Item eventKey={triggerId}>
+          <Accordion.Header>Trigger for this event</Accordion.Header>
+          <Accordion.Body>
+            <Row>
+              <Table size='sm' bordered hover>
+                <tbody>
+                  <tr>
+                    <td>Event Name</td>
+                    <td>{trigger?.customEventFilter?.[0]?.type}</td>
+                    <td>{trigger?.customEventFilter?.[0]?.parameter[1].value}</td>
+                  </tr>
+                  <tr>
+                    <td>Label Variable</td>
+                    <td>{trigger?.filter?.[0]?.type}</td>
+                    <td>{trigger?.filter?.[0]?.parameter[1].value}</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+    );
+  };
+
+  const renderVariables = () => {
+    const extractedVars = extractVLParameters(event.parameter[0].value);
+
+    return (
+      <Accordion>
+        <Accordion.Item eventKey={event.tagId}>
+          <Accordion.Header>Variables for this event</Accordion.Header>
+          <Accordion.Body>
+            <Row>
+              {extractedVars.length === 0 ? (
+                <div className='text-center text-muted'>There are no parameters assigned to {event.name}</div>
+              ) : (
+                <Table size='sm' bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>VL Parameter</th>
+                      <th>GTM Variable</th>
+                      <th>Is Array?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {extractedVars.map((v, index) => (
+                      <tr key={index}>
+                        <td>{v.vlParameter}</td>
+                        <td>{v.gtmParameter}</td>
+                        <td>{v.isArray ? "Yes" : "No"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+            </Row>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+    );
+  };
+
+  const extractVLParameters = (code: string) => {
+    const regex = /[Vv][Ll]\.AddParameter\(\s*["']([^"']+)["']\s*,\s*([^)]+)\)/g;
+    const results: { vlParameter: string; gtmParameter: string; isArray: boolean }[] = [];
+
+    let match;
+    while ((match = regex.exec(code)) !== null) {
+      const vlParameter = match[1].trim();
+      let gtmRaw = match[2].trim();
+      const isArray = gtmRaw.includes(".join(");
+
+      if (vlParameter === "OM.VLEventException" || vlParameter === "OM.VLEventExceptionName") {
+        continue;
+      }
+
+      // Clean up the GTM parameter
+      gtmRaw = gtmRaw
+        .replace(/\.join\([^)]*\)$/, "") // Remove .join() from the end
+        .replace(/\}\}(?:\.[a-zA-Z]+)?$/, "") // Remove trailing }} and any property access after it
+        .replace(/^\{\{/, "") // Remove leading {{
+        .replace(/parseFloat\s*\(\s*(.*?)\s*\)/g, "$1") // Remove parseFloat() with its parentheses
+        .trim();
+
+      results.push({
+        vlParameter,
+        gtmParameter: gtmRaw,
+        isArray,
+      });
+    }
+
+    return results;
+  };
+
+  return (
+    <Col xs={16} md={12} lg={8} xl={6} className='mb-3'>
+      <Card className='h-100 shadow-sm'>
+        <Card.Body>
+          <Row>
+            <Col>
+              <Card.Title className='d-flex justify-content-between align-items-center flex-wrap'>
+                <span className='me-2 text-truncate'>{event.name}</span>
+                <div className='d-flex gap-2 flex-wrap mt-2 mt-sm-0'>
+                  <Button size='sm' variant='outline-info' onClick={() => onEdit(event)}>
+                    <i className='fe fe-edit me-1 d-none d-sm-inline'></i>Edit
+                  </Button>
+                  <Button size='sm' variant='outline-danger' onClick={() => onRemove(event)}>
+                    <i className='fe fe-trash-2 me-1 d-none d-sm-inline'></i>Remove
+                  </Button>
+                  <Button size='sm' variant='outline-secondary' onClick={() => onShowCode(event)}>
+                    <i className='fe fe-code me-1 d-none d-sm-inline'></i>Code
+                  </Button>
+                </div>
+              </Card.Title>
+            </Col>
+          </Row>
+
+          {event.firingTriggerId.map((triggerId: string) => renderTriggerAccordion(triggerId))}
+
+          <Row>
+            <Col>{renderVariables()}</Col>
+          </Row>
+
+          <Row>
+            <Col className='relative inline-block'>
+              <InputGroup className='my-2'>
+                <Form.Control type='text' className={getUrlInputClass()} placeholder='Link for the event page (e.g., https://example.com)' value={eventUrl?.url || ""} onChange={(e) => onUrlChange(event.tagId, e.target.value)} />
+                <InputGroup.Text className='p-0 rounded-end'>
+                  <Button size='sm' variant='outline-info' onClick={() => onTestEvent(eventUrl?.url || "", event.tagId)} disabled={!eventUrl?.isValid || eventTest?.isLoading} className='border-0 h-100'>
+                    {eventTest?.isLoading ? (
+                      <>
+                        <span className='spinner-border spinner-border-sm me-1' role='status' aria-hidden='true'></span>
+                        Testing...
+                      </>
+                    ) : (
+                      <>
+                        <i className='fe fe-link me-1'></i>
+                        Test Event
+                      </>
+                    )}
+                  </Button>
+                </InputGroup.Text>
+                {eventUrl?.isValid === false && <div className='invalid-feedback'>Please enter a valid URL (e.g., https://example.com)</div>}
+              </InputGroup>
+              {eventTest?.error && (
+                <div className='alert alert-danger mt-2' role='alert'>
+                  <small>{eventTest.error}</small>
+                </div>
+              )}
+              {eventTest?.response?.success && (
+                <div className='alert alert-success mt-2' role='alert'>
+                  <small>Event check successful! Found {(eventTest.response?.events || []).length} matching events.</small>
+                </div>
+              )}
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+};
+
 const EventGTM = () => {
+  // Constants
   const sid = "756B5036644F706C4F6A4D3D";
   const oid = "504E6F37515941744B34633D";
-  // State for controlling the offcanvas
+  const urlRegex = /^(https?:\/\/)?(www\.)?([\w-]+\.)+[\w-]+([/\w-.~:?#[\]@!$&'()*+,;=]*)?$/i;
+
+  // State Management
   const [selectedEvent, setSelectedEvent] = useState<GTMTags | null>(null);
   const [newTrigger, setNewTrigger] = useState<GTMTriggers | null>(null);
   const [newVariable, setNewVariable] = useState<GTMVariables | null>(null);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [offcanvasWidth, setOffcanvasWidth] = useState("40%");
   const [showAddTagModal, setShowAddTagModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiResponse, setApiResponse] = useState<EventCheckResponse | null>(null);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [eventUrls, setEventUrls] = useState<Record<string, EventUrlState>>({});
+  const [eventTests, setEventTests] = useState<Record<string, EventTestState>>({});
   const [newTag, setNewTag] = useState({
     name: "",
     type: "html",
@@ -48,14 +287,39 @@ const EventGTM = () => {
     code: "",
   });
 
-  const handleNewTagClose = () => {
-    setShowAddTagModal(false);
+  // URL Validation Handlers
+  const handleUrlChange = (eventId: string, value: string) => {
+    const newState = { ...eventUrls };
+    if (value.trim() === "") {
+      newState[eventId] = { url: value, isValid: null };
+    } else {
+      const isUrlValid = urlRegex.test(value.trim());
+      newState[eventId] = {
+        url: value,
+        isValid: isUrlValid,
+      };
+    }
+    setEventUrls(newState);
   };
 
-  const handleNewTagShow = () => {
-    setShowAddTagModal(true);
+  const getUrlInputClass = (eventId: string) => {
+    const state = eventUrls[eventId];
+    if (!state || state.isValid === null) return "form-control rounded-start";
+    return `form-control ${state.isValid ? "is-valid" : "is-invalid"} rounded-start`;
   };
-  // Update offcanvas width based on screen size
+
+  // Modal Handlers
+  const handleNewTagClose = () => setShowAddTagModal(false);
+  const handleNewTagShow = () => setShowAddTagModal(true);
+
+  // Offcanvas Handlers
+  const handleShowCode = (event: GTMTags) => {
+    setSelectedEvent(event);
+    setShowOffcanvas(true);
+  };
+  const handleCloseOffcanvas = () => setShowOffcanvas(false);
+
+  // Responsive Layout Effects
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -67,63 +331,201 @@ const EventGTM = () => {
       }
     };
 
-    // Set initial width
     handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Cleanup event listener
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleShowCode = (event: GTMTags) => {
+  // API Integration
+  const checkEventIntegration = async (url: string, eventId: string) => {
+    if (!url || !eventUrls[eventId]?.isValid) {
+      setEventTests((prev) => ({
+        ...prev,
+        [eventId]: {
+          isLoading: false,
+          response: null,
+          error: "Please enter a valid URL first",
+        },
+      }));
+      return;
+    }
+
+    setEventTests((prev) => ({
+      ...prev,
+      [eventId]: {
+        isLoading: true,
+        response: null,
+        error: null,
+      },
+    }));
+
+    // Find the trigger for this event to get the expected label
+    const currentEvent = SampleGTMExport.containerVersion.tag.find((t) => t.tagId === eventId);
+    const trigger = currentEvent?.firingTriggerId ? SampleGTMExport.containerVersion.trigger.find((t) => currentEvent.firingTriggerId.includes(t.triggerId)) : null;
+    const expectedLabel = trigger?.filter?.[0]?.parameter[1].value;
+
+    if (!expectedLabel) {
+      setEventTests((prev) => ({
+        ...prev,
+        [eventId]: {
+          isLoading: false,
+          response: null,
+          error: "Could not find expected label for this event in GTM configuration",
+        },
+      }));
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/api/event-check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: url,
+          expectedLabel: expectedLabel,
+        }),
+      });
+
+      const data: EventCheckResponse = await response.json();
+
+      if (data.success) {
+        setEventTests((prev) => ({
+          ...prev,
+          [eventId]: {
+            isLoading: false,
+            response: data,
+            error: null,
+          },
+        }));
+      } else {
+        // Format all captured events for display
+        const allEvents = data.allEvents || [];
+
+        // Group events by type
+        const vlEvents = allEvents.filter((event) => event.vl_label).map((event) => event.vl_label);
+
+        const gtmEvents = allEvents.filter((event) => event.event && !event.vl_label).map((event) => event.event);
+
+        const otherEvents = allEvents.filter((event) => !event.event && !event.vl_label).map((event) => Object.keys(event).join(", "));
+
+        // Build error message
+        let errorMessage = `Expected event "${expectedLabel}" not found.\n`;
+
+        if (allEvents.length === 0) {
+          errorMessage += "No events were captured on the page.";
+        } else {
+          if (vlEvents.length > 0) {
+            errorMessage += `\nVL Events found: ${vlEvents.join(", ")}`;
+          }
+          if (gtmEvents.length > 0) {
+            errorMessage += `\nGTM Events found: ${gtmEvents.join(", ")}`;
+          }
+          if (otherEvents.length > 0) {
+            errorMessage += `\nOther Events found: ${otherEvents.join(", ")}`;
+          }
+        }
+
+        setEventTests((prev) => ({
+          ...prev,
+          [eventId]: {
+            isLoading: false,
+            response: null,
+            error: errorMessage,
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error during event check:", error);
+      setEventTests((prev) => ({
+        ...prev,
+        [eventId]: {
+          isLoading: false,
+          response: null,
+          error: "An error occurred while checking the event",
+        },
+      }));
+    }
+  };
+
+  // Event Handlers
+  const handleEditEvent = (event: GTMTags) => {
     setSelectedEvent(event);
     setShowOffcanvas(true);
   };
 
-  const handleCloseOffcanvas = () => {
-    setShowOffcanvas(false);
+  const handleRemoveEvent = (event: GTMTags) => {
+    // TODO: Implement event removal logic
+    console.log("Remove event:", event.name);
   };
 
+  // Render Helper Functions
   const renderEventCard = (event: GTMTags) => {
+    const eventTest = eventTests[event.tagId] || {
+      isLoading: false,
+      response: null,
+      error: null,
+    };
+
     return (
       <Col key={event.tagId} xs={16} md={12} lg={8} xl={6} className='mb-3'>
         <Card className='h-100 shadow-sm'>
           <Card.Body>
             <Row>
-              <Card.Title className='d-flex justify-content-between align-items-center flex-wrap'>
-                <span className='me-2 text-truncate'>{event.name}</span>
-                <div className='d-flex gap-2 flex-wrap mt-2 mt-sm-0'>
-                  <Button size='sm' variant='danger'>
-                    <i className='fe fe-trash-2 me-1 d-none d-sm-inline'></i>
-                    Remove
-                  </Button>
+              <Col>
+                <Card.Title className='d-flex justify-content-between align-items-center flex-wrap'>
+                  <span className='me-2 text-truncate'>{event.name}</span>
+                  <div className='d-flex gap-2 flex-wrap mt-2 mt-sm-0'>
+                    <Button size='sm' variant='outline-info' onClick={() => handleShowCode(event)}>
+                      <i className='fe fe-edit me-1 d-none d-sm-inline'></i>Edit
+                    </Button>
+                    <Button size='sm' variant='outline-danger'>
+                      <i className='fe fe-trash-2 me-1 d-none d-sm-inline'></i>Remove
+                    </Button>
+                    <Button size='sm' variant='secondary' onClick={() => handleShowCode(event)}>
+                      <i className='fe fe-code me-1 d-none d-sm-inline'></i>Code
+                    </Button>
+                  </div>
+                </Card.Title>
+              </Col>
+            </Row>
 
-                  <Button size='sm' variant='outline-info' onClick={() => handleShowCode(event)}>
-                    <i className='fe fe-code me-1 d-none d-sm-inline'></i>Code
-                  </Button>
-                </div>
-              </Card.Title>
+            {event.firingTriggerId.map((triggerId: string) => renderTriggerAccordion(triggerId))}
+            <Row>
+              <Col>{renderVariablesAccordion(event)}</Col>
             </Row>
             <Row>
               <Col className='relative inline-block'>
                 <InputGroup className='my-2'>
-                  {/* asagidaki input icin url olup olmadigini kontrol et
-                   * ornek url de eklenebilir
-                   *https://example.com/
-                   */}
-                  <input type='text' className='form-control' placeholder='Link for the event page' />
-                  <Button size='sm' variant='outline-info'>
-                    <i className='fe fe-link me-1 d-none d-sm-inline'></i>Test Event
-                  </Button>
+                  <Form.Control type='text' className={getUrlInputClass(event.tagId)} placeholder='Link for the event page (e.g., https://example.com)' value={eventUrls[event.tagId]?.url || ""} onChange={(e) => handleUrlChange(event.tagId, e.target.value)} />
+                  <InputGroup.Text className='p-0 rounded-end'>
+                    <Button size='sm' variant='outline-info' onClick={() => checkEventIntegration(eventUrls[event.tagId]?.url || "", event.tagId)} disabled={!eventUrls[event.tagId]?.isValid || eventTest.isLoading} className='border-0 h-100'>
+                      {eventTest.isLoading ? (
+                        <>
+                          <span className='spinner-border spinner-border-sm me-1' role='status' aria-hidden='true'></span>
+                          Testing...
+                        </>
+                      ) : (
+                        <>
+                          <i className='fe fe-link me-1'></i>
+                          Test Event
+                        </>
+                      )}
+                    </Button>
+                  </InputGroup.Text>
+                  {eventUrls[event.tagId]?.isValid === false && <div className='invalid-feedback'>Please enter a valid URL (e.g., https://example.com)</div>}
                 </InputGroup>
-              </Col>
-            </Row>
-            {event.firingTriggerId.map((triggerId) => renderTriggerAccordion(triggerId))}
-            <Row>
-              <Col>
-                <>{renderVariablesAccordion(event)}</>
+                {eventTest.error && (
+                  <div className='alert alert-danger mt-2' role='alert'>
+                    <small>{eventTest.error}</small>
+                  </div>
+                )}
+                {eventTest.response?.success && (
+                  <div className='alert alert-success mt-2' role='alert'>
+                    <small>Event check successful! Found {(eventTest.response?.events || []).length} matching events.</small>
+                  </div>
+                )}
               </Col>
             </Row>
           </Card.Body>
@@ -149,7 +551,7 @@ const EventGTM = () => {
                   </tr>
                   <tr>
                     <td>Label Variable</td>
-                    <td> {trigger?.filter?.[0]?.type}</td>
+                    <td>{trigger?.filter?.[0]?.type}</td>
                     <td>{trigger?.filter?.[0]?.parameter[1].value}</td>
                   </tr>
                 </tbody>
@@ -196,47 +598,6 @@ const EventGTM = () => {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-    );
-  };
-
-  function extractVLParameters(code: string) {
-    const regex = /[Vv][Ll]\.AddParameter\(\s*["']([^"']+)["']\s*,\s*([^)]+)\)/g;
-    const results: { vlParameter: string; gtmParameter: string; isArray: boolean }[] = [];
-
-    let match;
-    while ((match = regex.exec(code)) !== null) {
-      const vlParameter = match[1].trim();
-      let gtmRaw = match[2].trim();
-      const isArray = gtmRaw.includes(".join(");
-
-      if (vlParameter === "OM.VLEventException" || vlParameter === "OM.VLEventExceptionName") {
-        continue;
-      }
-
-      const propertyMatch = gtmRaw.match(/^(.*?)\.(\w+)$/);
-      if (propertyMatch) {
-        const objectPart = propertyMatch[1].replace(/^\{{2}\s*|\s*\}{2}$/g, "");
-        const property = propertyMatch[2];
-        gtmRaw = `${objectPart}.${property}`;
-      } else {
-        gtmRaw = gtmRaw.replace(/^\{{2}\s*|\s*\}{2}$/g, "");
-      }
-
-      results.push({ vlParameter, gtmParameter: gtmRaw, isArray });
-    }
-
-    return results;
-  }
-
-  const addEventParameter = () => {
-    console.log("addEventParameter");
-    return (
-      <tr>
-        <td>
-          <span>OM.</span>
-          <Form.Control type='text' value={newTag.name} placeholder='Enter tag name' />
-        </td>
-      </tr>
     );
   };
 
@@ -360,48 +721,52 @@ const EventGTM = () => {
     );
   };
 
-  const checkEventIntegration = async () => {
-    // iki parametre tanimla
-    // birinci parametre url
-    // ikinici parametre ise event label
-    setIsLoading(true);
-    setApiError(null);
-    setApiResponse(null);
-
-    try {
-      const response = await fetch("http://localhost:3000/api/event-check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: "https://hascelik.com/",
-          expectedLabel: "VL-PageView",
-        }),
-      });
-
-      const data: EventCheckResponse = await response.json();
-
-      if (data.success) {
-        console.log("Event check successful:", data);
-        console.log("Found events:", data.events);
-        console.log("All captured events:", data.allEvents);
-        setApiResponse(data);
-      } else {
-        console.error("Event check failed:", data.message);
-        setApiError(data.message || "Event check failed");
-        if (data.allEvents) {
-          console.log("All captured events despite failure:", data.allEvents);
-        }
-      }
-    } catch (error) {
-      console.error("Error during event check:", error);
-      setApiError("An error occurred while checking the event");
-    } finally {
-      setIsLoading(false);
-    }
+  // Form Handlers
+  const addEventParameter = () => {
+    console.log("addEventParameter");
+    return (
+      <tr>
+        <td>
+          <span>OM.</span>
+          <Form.Control type='text' value={newTag.name} placeholder='Enter tag name' />
+        </td>
+      </tr>
+    );
   };
 
+  function extractVLParameters(code: string) {
+    const regex = /[Vv][Ll]\.AddParameter\(\s*["']([^"']+)["']\s*,\s*([^)]+)\)/g;
+    const results: { vlParameter: string; gtmParameter: string; isArray: boolean }[] = [];
+
+    let match;
+    while ((match = regex.exec(code)) !== null) {
+      const vlParameter = match[1].trim();
+      let gtmRaw = match[2].trim();
+      const isArray = gtmRaw.includes(".join(");
+
+      if (vlParameter === "OM.VLEventException" || vlParameter === "OM.VLEventExceptionName") {
+        continue;
+      }
+
+      // Clean up the GTM parameter
+      gtmRaw = gtmRaw
+        .replace(/\.join\([^)]*\)$/, "") // Remove .join() from the end
+        .replace(/\}\}(?:\.[a-zA-Z]+)?$/, "") // Remove trailing }} and any property access after it
+        .replace(/^\{\{/, "") // Remove leading {{
+        .replace(/parseFloat\s*\(\s*(.*?)\s*\)/g, "$1") // Remove parseFloat() with its parentheses
+        .trim();
+
+      results.push({
+        vlParameter,
+        gtmParameter: gtmRaw,
+        isArray,
+      });
+    }
+
+    return results;
+  }
+
+  // Main Component Render
   return (
     <Container fluid className='p-6'>
       <PageHeading heading='Event Integration' />
@@ -429,7 +794,7 @@ const EventGTM = () => {
               <h4 className='mb-0'>GTM Integration Data</h4>
             </Card.Header>
             <Card.Body>
-              <Row>{SampleGTMExport.containerVersion.tag && SampleGTMExport.containerVersion.tag.filter((event) => event.name !== "RMC - ControlEventRequest").map((event) => renderEventCard(event))}</Row>
+              <Row>{SampleGTMExport.containerVersion.tag && SampleGTMExport.containerVersion.tag.filter((event) => event.name !== "RMC - ControlEventRequest").map((event) => <EventCard key={event.tagId} event={event} eventUrl={eventUrls[event.tagId]} eventTest={eventTests[event.tagId]} onUrlChange={handleUrlChange} onTestEvent={checkEventIntegration} onShowCode={handleShowCode} onEdit={handleEditEvent} onRemove={handleRemoveEvent} />)}</Row>
 
               <Button
                 className='w-100'
@@ -466,28 +831,8 @@ const EventGTM = () => {
       {renderNewTagModal()}
       {/* burada yapilan islem her bir event kartinda Test Event butonunda calisacak */}
       <div className='d-grid gap-2 d-md-flex justify-content-md-end my-2'>
-        <Button onClick={checkEventIntegration} disabled={isLoading}>
-          {isLoading ? "Checking Event..." : "Create GTM Export"}
-        </Button>
+        <Button>Create GTM Export</Button>
       </div>
-      {apiError && (
-        <div className='alert alert-danger mt-3' role='alert'>
-          <h5>Event Check Failed</h5>
-          <p>{apiError}</p>
-          {apiResponse?.allEvents && (
-            <div>
-              <small>Found {apiResponse.allEvents.length} other events on the page</small>
-            </div>
-          )}
-        </div>
-      )}
-      {apiResponse?.success && (
-        <div className='alert alert-success mt-3' role='alert'>
-          <h5>Event Check Successful</h5>
-          <p>Found {apiResponse.events?.length || 0} matching events</p>
-          <p>Total events captured: {apiResponse.allEvents?.length || 0}</p>
-        </div>
-      )}
     </Container>
   );
 };

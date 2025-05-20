@@ -6,6 +6,9 @@ import { Container, Row, Col, Card, Button, Offcanvas, Badge, Accordion, Table, 
 // import widget/custom components
 import { PageHeading } from "widgets";
 
+// import standardized GTM tags
+import { CartViewTag, LoginTag, PageViewTag, SearchViewTag, AddFavTag, RemoveFavTag, SignUpTag, PurchaseTag, CategoryViewTag, ProductViewTag } from "./GTMExports/StandardizedTags";
+
 import SampleGTMExport from "../../data/JSONFiles/SampleGTMExport.json";
 
 interface GTMExport {
@@ -37,6 +40,7 @@ interface GTMExport {
     builtInVariable: GTMTags[];
   };
 }
+
 interface GTMTags {
   accountId: string;
   containerId: string;
@@ -103,6 +107,31 @@ interface GTMBuiltInVariables {
   type: string;
 }
 
+// Define type for standardized tag
+interface StandardizedTag {
+  name: string;
+  html: string;
+}
+
+// Define type for standardized tags map
+type StandardizedTags = {
+  [key in "RMC-CartView" | "RMC-Login" | "RMC-PageView" | "RMC-SearchView" | "RMC-AddFav" | "RMC-RemoveFav" | "RMC-SignUp" | "RMC-Purchase" | "RMC-CategoryView" | "RMC-ProductView"]: StandardizedTag;
+};
+
+// Map of standardized tags
+const standardizedTags: StandardizedTags = {
+  "RMC-CartView": CartViewTag,
+  "RMC-Login": LoginTag,
+  "RMC-PageView": PageViewTag,
+  "RMC-SearchView": SearchViewTag,
+  "RMC-AddFav": AddFavTag,
+  "RMC-RemoveFav": RemoveFavTag,
+  "RMC-SignUp": SignUpTag,
+  "RMC-Purchase": PurchaseTag,
+  "RMC-CategoryView": CategoryViewTag,
+  "RMC-ProductView": ProductViewTag,
+};
+
 const EventGTM = () => {
   const sid = "756B5036644F706C4F6A4D3D";
   const oid = "504E6F37515941744B34633D";
@@ -134,7 +163,26 @@ const EventGTM = () => {
   }, []);
 
   const handleShowCode = (event: GTMTags) => {
-    setSelectedEvent(event);
+    // If there's a standardized version of the tag, use it
+    if (standardizedTags[event.name]) {
+      setSelectedEvent({
+        ...event,
+        parameter: [
+          {
+            type: "TEMPLATE",
+            key: "html",
+            value: standardizedTags[event.name].html,
+          },
+          {
+            type: "BOOLEAN",
+            key: "supportDocumentWrite",
+            value: "false",
+          },
+        ],
+      });
+    } else {
+      setSelectedEvent(event);
+    }
     setShowOffcanvas(true);
   };
 
@@ -151,9 +199,6 @@ const EventGTM = () => {
               <Card.Title className='d-flex justify-content-between align-items-center flex-wrap'>
                 <span className='me-2 text-truncate'>{event.name}</span>
                 <div className='d-flex gap-2 flex-wrap mt-2 mt-sm-0'>
-                  {/* <Button size='sm' variant='primary'>
-                  <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add
-                </Button> */}
                   <Button size='sm' variant='danger'>
                     <i className='fe fe-trash-2 me-1 d-none d-sm-inline'></i>
                     Remove
@@ -198,50 +243,50 @@ const EventGTM = () => {
               <Table size='sm' bordered hover>
                 <tbody>
                   <tr>
-                    <td>Event Name</td>
-                    <td>{trigger?.customEventFilter?.[0]?.type}</td>
-                    <td>{trigger?.customEventFilter?.[0]?.parameter[1].value}</td>
+                    <td>Name</td>
+                    <td>{trigger?.name}</td>
                   </tr>
                   <tr>
-                    <td>Label Variable</td>
-                    <td> {trigger?.filter?.[0]?.type}</td>
-                    <td>{trigger?.filter?.[0]?.parameter[1].value}</td>
+                    <td>Type</td>
+                    <td>{trigger?.type}</td>
+                  </tr>
+                  <tr>
+                    <td>Filter</td>
+                    <td>
+                      {trigger?.filter?.map((filter, index) => (
+                        <div key={index}>
+                          {filter.type}: {filter.parameter[0].value} {filter.parameter[1].value}
+                        </div>
+                      ))}
+                    </td>
                   </tr>
                 </tbody>
               </Table>
-              <Button size='sm' variant='secondary'>
-                <i className='fe fe-plus me-1 d-none d-sm-inline'></i>Add Trigger
-              </Button>
             </Row>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
     );
   };
-  // Type assertion for the imported JSON
 
   const renderVariablesAccordion = (eventCode: GTMTags) => {
-    const { templateVariables, omParameters } = findVariables(eventCode.parameter[0].value);
-
+    const variables = findVariables(eventCode.parameter[0].value);
     return (
-      <Accordion>
-        <Accordion.Item eventKey={eventCode.tagId}>
-          <Accordion.Header>Variables for this event</Accordion.Header>
+      <Accordion className='mb-2'>
+        <Accordion.Item eventKey='0'>
+          <Accordion.Header>Variables used in this event</Accordion.Header>
           <Accordion.Body>
-            <div className='d-flex flex-wrap gap-2'>
-              {templateVariables.map((variable: string, i: number) => (
-                <span className='font-size-12' key={`tpl-${i}`}>
-                  {variable}
-                  {i < templateVariables.length - 1 ? ", " : ""}
-                </span>
-              ))}
-              {omParameters.map((param: string, i: number) => (
-                <span className='font-size-12' key={`om-${i}`}>
-                  OM.{param}
-                  {i < omParameters.length - 1 ? ", " : ""}
-                </span>
-              ))}
-            </div>
+            <Row>
+              <Table size='sm' bordered hover>
+                <tbody>
+                  {variables.map((variable, index) => (
+                    <tr key={index}>
+                      <td>{variable}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Row>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
@@ -249,67 +294,28 @@ const EventGTM = () => {
   };
 
   function findVariables(code: string) {
-    const templateVars = code.match(/{{\s*([^}]+)\s*}}/g)?.map((v) => v.replace(/[{}]/g, "").trim()) || [];
-    const filteredTemplateVars = templateVars.filter((v) => !["RMC-sid", "RMC-oid"].includes(v));
-
-    // Try multiple patterns to capture OM parameters
-    const omParams = [...code.matchAll(/vl\.AddParameter\("OM\.([^"]+)"/g), ...code.matchAll(/vl\.AddParameter\('OM\.([^']+)'/g), ...code.matchAll(/OM\.([^"'\s,)]+)/g)].map((m) => m[1]);
-
-    const filteredOmParams = omParams.filter((p) => !["VLEventException", "VLEventExceptionName", "VLControlEventExceptionName", "VLControlEventException"].includes(p) && p && p.trim() !== "");
-
-    return {
-      templateVariables: filteredTemplateVars,
-      omParameters: filteredOmParams,
-    };
+    const regex = /{{([^}]+)}}/g;
+    const matches = code.match(regex);
+    return matches ? matches.map((match) => match.slice(2, -2)) : [];
   }
 
   return (
     <Container fluid className='p-6'>
-      <PageHeading heading='Event Integration' />
       <Row>
-        <Col lg={12} md={12} sm={12}>
-          <Card>
-            <Card.Header>
-              <h4 className='mb-0'>GTM Integration Settings</h4>
-            </Card.Header>
-            <Card.Body>
-              <p className='mb-0'>Configure your event integration settings here. This allows you to track and manage events in your application.</p>
-              <p className='mb-0'>
-                <a href={"https://relateddigital.atlassian.net/wiki/spaces/RMCKBT/pages/2163507226/Web+DataLayer+Event+ablonu+Entegrasyonu"} target='_blank' rel='noopener noreferrer'>
-                  Please see first steps for this integration type here.
-                </a>
-              </p>
-            </Card.Body>
-          </Card>
+        <Col>
+          <PageHeading heading='GTM Events' />
         </Col>
       </Row>
-      <Row>
-        <Col lg={12} md={12} sm={12}>
-          <Card className='mt-4'>
-            <Card.Header>
-              <h4 className='mb-0'>GTM Integration Data</h4>
-            </Card.Header>
-            <Card.Body>
-              <Row>{SampleGTMExport.containerVersion.tag && SampleGTMExport.containerVersion.tag.filter((event) => event.name !== "RMC - ControlEventRequest").map((event) => renderEventCard(event))}</Row>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      <Row>{SampleGTMExport.containerVersion.tag.map((event) => renderEventCard(event))}</Row>
 
-      {/* Offcanvas for displaying code */}
       <Offcanvas show={showOffcanvas} onHide={handleCloseOffcanvas} placement='end' style={{ width: offcanvasWidth }}>
         <Offcanvas.Header closeButton>
-          <div className='d-flex align-items-center flex-wrap'>
-            <Offcanvas.Title>{selectedEvent?.name} - Code</Offcanvas.Title>
-            <Badge pill bg='light' text='dark' className='mx-2'>
-              Read-only
-            </Badge>
-          </div>
+          <Offcanvas.Title>Event Code</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           {selectedEvent && (
-            <pre className='p-3 bg-light rounded' style={{ overflowY: "auto", whiteSpace: "pre-wrap" }}>
-              {selectedEvent.parameter[0].value}
+            <pre>
+              <code>{selectedEvent.parameter[0].value}</code>
             </pre>
           )}
         </Offcanvas.Body>
