@@ -1,34 +1,35 @@
+// last best version
 type TagParams = {
-	name: string;
+  name: string;
 };
 
 export default function CreateEvent(tagParams: TagParams) {
-	// variablesObj icindeki arraylerin ikinci paratetresi o degiskenlerden array donup donmedigini kontrol edecek
-	const config = {
-		eventName: tagParams.name,
-		variablesObj: {
-			"OM.pbid": ["{{RMC-ecommerce.cart.basket_id}}", false],
-			"OM.pb": ["{{RMC-CartArray-PB-JS}}", true],
-			"OM.pu": ["{{RMC-CartArray-PU-JS}}", true],
-			"OM.ppr": ["{{RMC-CartArray-PPR-JS}}", true],
-			"OM.pbt": ["{{RMC-CartArray-PBT-JS}}", false],
-		},
-		isCollected: false,
-	};
-	const variablesCode = Object.entries(config.variablesObj)
-		.map(([key, value]) => `  "${key}": ${value[0]}`)
-		.join(",\n");
-	const parametersCode = Object.entries(config.variablesObj)
-		.map(([key, value]) => {
-			if (value[1]) {
-				return `VL.AddParameter("${key}", ${value[0]}.join(";"));`;
-			} else {
-				return `VL.AddParameter("${key}", ${value[0]});`;
-			}
-		})
-		.join("\n");
+  // variablesObj icindeki arraylerin ikinci paratetresi o degiskenlerden array donup donmedigini kontrol edecek
+  const config = {
+    eventName: tagParams.name,
+    variablesObj: {
+      "OM.pbid": ["{{RMC-ecommerce.cart.basket_id}}", false],
+      "OM.pb": ["{{RMC-CartArray-PB-JS}}", true],
+      "OM.pu": ["{{RMC-CartArray-PU-JS}}", true],
+      "OM.ppr": ["{{RMC-CartArray-PPR-JS}}", true],
+      "OM.pbt": ["{{RMC-CartArray-PBT-JS}}", false],
+    },
+    isCollected: false,
+  };
+  const variablesCode = Object.entries(config.variablesObj)
+    .map(([key, value]) => `  "${key}": ${value[0]}`)
+    .join(",\n");
+  const parametersCode = Object.entries(config.variablesObj)
+    .map(([key, value]) => {
+      if (value[1]) {
+        return `VL.AddParameter("${key}", ${value[0]}.join(";"));`;
+      } else {
+        return `VL.AddParameter("${key}", ${value[0]});`;
+      }
+    })
+    .join("\n");
 
-	const tagCode = `
+  const tagCode = `
 <script type="text/javascript">
   function on${config.eventName}Loaded() {
     var tagVars = \n${variablesCode}\n};
@@ -89,27 +90,27 @@ export default function CreateEvent(tagParams: TagParams) {
   }
 </script>`;
 
-	console.log(escapeForGTM(tagCode));
+  console.log(escapeForGTM(tagCode));
 
-	return escapeForGTM(tagCode);
+  return escapeForGTM(tagCode);
 }
 
 export function VariableToArray() {
-	const variableCode = `function(){\n  var purchaseProductID = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductID.push(product.id);\n  });\n  return purchaseProductID;\n}`;
-	return variableCode;
+  const variableCode = `function(){\n  var purchaseProductID = [];\n  {{RMC-ecommerce.checkout.products}}.forEach(function(product){\n    purchaseProductID.push(product.id);\n  });\n  return purchaseProductID;\n}`;
+  return variableCode;
 }
 
 //helper function for string escapes
 function escapeForGTM(input: string): string {
-	return (
-		input
-			// Escape backslashes first in case they exist
-			// .replace(/\\/g, "\\\\")
-			// Escape double quotes
-			.replace(/"/g, '\\"')
-			// Escape single quotes (if needed)
-			// .replace(/'/g, "\\'")
-			// Replace real newline characters with the literal "\n"
-			.replace(/\n/g, "\\n")
-	);
+  return (
+    input
+      // Escape backslashes first in case they exist
+      // .replace(/\\/g, "\\\\")
+      // Escape double quotes
+      .replace(/"/g, '\\"')
+      // Escape single quotes (if needed)
+      // .replace(/'/g, "\\'")
+      // Replace real newline characters with the literal "\n"
+      .replace(/\n/g, "\\n")
+  );
 }
