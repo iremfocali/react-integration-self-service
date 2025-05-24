@@ -1,6 +1,6 @@
 // import node module libraries
 import { FC } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
 
 // import widget/custom components
 import { PageHeading } from "widgets";
@@ -15,10 +15,7 @@ const Offline: FC = () => {
             <Card.Header>
               <h4 className='mb-0'>Offline Integration Settings</h4>
             </Card.Header>
-            <Card.Body>
-              <p className='mb-0'>Configure your offline integration settings here. This allows your application to work seamlessly in offline mode.</p>
-              {/* Add your offline integration specific content here */}
-            </Card.Body>
+            <Card.Body>{/* Add your offline integration specific content here */}</Card.Body>
           </Card>
         </Col>
       </Row>

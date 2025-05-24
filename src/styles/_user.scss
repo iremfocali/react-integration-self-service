@@ -7,3 +7,34 @@
   height: 20px;
   width: 20px;
 }
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 25%;
+}
+
+.input-with-button {
+  padding-right: 70px; /* Add space for the button inside the input */
+}
+
+.inside-button {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  height: 90%;
+  // padding: 0 12px;
+  // font-size: 0.9rem;
+}
+
+.matching-tag-input {
+  background-color: #19875438 !important;
+  border: 2px solid #198754 !important;
+  box-shadow: 0 0 0 1px #198754 !important;
+}
+.unmapped-tag-input:not(:focus) {
+  background-color: #dc354538 !important;
+  border: 2px solid #dc3545 !important;
+  box-shadow: 0 0 0 1px #dc3545 !important;
+}
