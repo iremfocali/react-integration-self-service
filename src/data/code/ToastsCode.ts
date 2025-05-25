@@ -1,7 +1,7 @@
-export const BasicExampleCode = `  
+export const BasicToastCode = `   
 <Toast>
     <Toast.Header>
-        <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+        <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
         <strong className="me-auto">Bootstrap</strong>
         <small>11 mins ago</small>
     </Toast.Header>
@@ -9,10 +9,10 @@ export const BasicExampleCode = `
 </Toast>
 `.trim();
 
-export const TranslucentToastsCode = `   
-<Toast className="mb-4" >
+export const LiveToastCode = `   
+<Toast>
     <Toast.Header>
-        <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+        <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
         <strong className="me-auto">Bootstrap</strong>
         <small>just now</small>
     </Toast.Header>
@@ -20,96 +20,44 @@ export const TranslucentToastsCode = `
 </Toast>
 `.trim();
 
-export const StackingCode = `   
-<Toast className="mb-4">
+export const DismissibleToastCode = `   
+<Toast onClose={() => setShow(false)} show={show} delay={3000} autohide>
     <Toast.Header>
-        <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+        <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
         <strong className="me-auto">Bootstrap</strong>
-        <small>just now</small>
+        <small>11 mins ago</small>
     </Toast.Header>
-    <Toast.Body>See? Just like this.</Toast.Body>
-</Toast>
-<Toast animation={false}>
-    <Toast.Header>
-        <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
-        <strong className="me-auto">Bootstrap</strong>
-        <small>2 seconds ago</small>
-    </Toast.Header>
-    <Toast.Body>Heads up, toasts will stack automatically</Toast.Body>
+    <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
 </Toast>
 `.trim();
 
-export const PlacementCode1 = `   
-<div className="mb-3">
-    <label htmlFor="selectToastPlacement">Toast position</label>
-    <Form.Select
-        id="selectToastPlacement"
-        className="mt-2"
-        onChange={(e) => setPosition(e.currentTarget.value)}
-        >
-        {[
-            'top-start',
-            'top-center',
-            'top-end',
-            'middle-start',
-            'middle-center',
-            'middle-end',
-            'bottom-start',
-            'bottom-center',
-            'bottom-end',
-        ].map((p) => (
-            <option key={p} value={p}>
-                {p}
-            </option>
-        ))}
-    </Form.Select>
+export const PlacementCode = `   
+<div aria-live="polite" aria-atomic="true" className="bg-dark position-relative" style={{ minHeight: '240px' }}>
+    <Toast>
+        <Toast.Header>
+            <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+        </Toast.Header>
+        <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+    </Toast>
 </div>
-<div
-    aria-live="polite"
-    aria-atomic="true"
-    className="position-relative"
-    style={{ minHeight: '240px' }}
-    >
-    <ToastContainer className="p-3" position={position}>
-        <Toast>
-            <Toast.Header closeButton={false}>
-                <Image src="/images/avatar/avatar-1.jpg" className="rounded me-2 avatar-xs" alt="..." />
-                <strong className="me-auto">Bootstrap</strong>
-                <small>11 mins ago</small>
-            </Toast.Header>
-            <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
-        </Toast>
-    </ToastContainer>
-</div>   
 `.trim();
 
 export const PlacementCode2 = `   
-<div
-    aria-live="polite"
-    aria-atomic="true"
-    style={{
-        position: 'relative',
-        minHeight: '250px',
-    }}
-    >
-    <div
-        style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-        }}
-        >
-        <Toast className="mb-4">
+<div aria-live="polite" aria-atomic="true" style={{ position: 'relative', minHeight: '200px' }}>
+    <div style={{ position: 'absolute', top: 0, right: 0 }}>
+        <Toast>
             <Toast.Header>
-                <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+                <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
                 <strong className="me-auto">Bootstrap</strong>
                 <small>just now</small>
             </Toast.Header>
             <Toast.Body>See? Just like this.</Toast.Body>
         </Toast>
-        <Toast className="mb-4">
+        <Toast>
             <Toast.Header>
-                <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+                <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
                 <strong className="me-auto">Bootstrap</strong>
                 <small>2 seconds ago</small>
             </Toast.Header>
@@ -127,7 +75,7 @@ export const PlacementCode3 = `
     }}>
     <Toast>
         <Toast.Header>
-            <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
+            <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
             <strong className="me-auto">Bootstrap</strong>
             <small>11 mins ago</small>
         </Toast.Header>
@@ -136,58 +84,19 @@ export const PlacementCode3 = `
 </div>
 `.trim();
 
-export const DismissibleCode = `  
-const Toasts = () => {
-
-    const [showA, setShowA] = useState(true);
-    const [showB, setShowB] = useState(true);
-  
-    const toggleShowA = () => setShowA(!showA);
-    const toggleShowB = () => setShowB(!showB);
-
-    return ( 
-        <Fragment> 
-            <Row>
-                <Col md={6} className="mb-2">
-                    <Button onClick={toggleShowA} className="mb-2">
-                        Toggle Toast <strong>with</strong> Animation
-                    </Button>
-                    <Toast className="mb-4" show={showA} onClose={toggleShowA}>
-                        <Toast.Header>
-                            <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
-                            <strong className="me-auto">Bootstrap</strong>
-                            <small>just now</small>
-                        </Toast.Header>
-                        <Toast.Body>See? Just like this.</Toast.Body>
-                    </Toast>
-                </Col>
-                <Col md={6} className="mb-2">
-                    <Button onClick={toggleShowB} className="mb-2">
-                        Toggle Toast <strong>without</strong> Animation
-                    </Button>
-                    <Toast onClose={toggleShowB} show={showB} animation={false}>
-                        <Toast.Header>
-                            <Image src="https://fakeimg.pl/20x20/754FFE/754FFE/" className="rounded me-2" alt="" />
-                            <strong className="me-auto">Bootstrap</strong>
-                            <small>2 seconds ago</small>
-                        </Toast.Header>
-                        <Toast.Body>Heads up, toasts will stack automatically</Toast.Body>
-                    </Toast>
-                </Col>
-            </Row>
-        </Fragment>
-    )
-}
+export const CustomToastCode = `   
+<div>
+    <Toast>
+        <Toast.Header>
+            <Image src="https://placehold.co/20x20/754FFE/754FFE" className="rounded me-2" alt="" />
+            <strong className="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+        </Toast.Header>
+        <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+    </Toast>
+</div>
 `.trim();
 
-export const ToastsCode = [
-	BasicExampleCode,
-	TranslucentToastsCode,
-	StackingCode,
-	PlacementCode1,
-	PlacementCode2,
-	PlacementCode3,
-	DismissibleCode
-];
+export const ToastsCode = [BasicToastCode, LiveToastCode, DismissibleToastCode, PlacementCode, PlacementCode2, PlacementCode3, CustomToastCode];
 
 export default ToastsCode;

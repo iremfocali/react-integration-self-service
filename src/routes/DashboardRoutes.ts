@@ -14,6 +14,7 @@ import { v4 as uuid } from "uuid";
  * title       : string - If menu contains children use title to provide main menu name.
  * badge       : string - (Optional - Default - '') If you specify badge value it will be displayed beside the menu title or menu item.
  * badgecolor  : string - (Optional - Default - 'primary') - Used to specify badge background color.
+ * hidden      : boolean - (Optional - Default - false) If true, the item will not be shown in the menu but will still be accessible via URL.
  *
  * Applicable for subitems / children items routes
  * name        : string - If it's a menu item in which you are specifying a link, use name (don't use title for that).
@@ -82,16 +83,19 @@ export const DashboardMenu: DashboardMenuProps[] = [
     title: "Layouts",
     icon: "layout",
     link: "/layout-vertical",
+    hidden: true,
   },
   {
     id: uuid(),
     title: "UI COMPONENTS",
     grouptitle: true,
+    hidden: true,
   },
   {
     id: uuid(),
     title: "Components",
     icon: "monitor",
+    hidden: true,
     children: [
       { id: uuid(), link: "/components/accordions", name: "Accordions" },
       { id: uuid(), link: "/components/alerts", name: "Alerts" },
@@ -123,6 +127,7 @@ export const DashboardMenu: DashboardMenuProps[] = [
     id: uuid(),
     title: "Menu Level",
     icon: "corner-left-down",
+    hidden: true,
     children: [
       {
         id: uuid(),
@@ -156,17 +161,20 @@ export const DashboardMenu: DashboardMenuProps[] = [
     id: uuid(),
     title: "Documentation",
     grouptitle: true,
+    hidden: true,
   },
   {
     id: uuid(),
     title: "Docs",
     icon: "clipboard",
     link: "/documentation",
+    hidden: true,
   },
   {
     id: uuid(),
     title: "Changelog",
     icon: "git-pull-request",
     link: "/changelog",
+    hidden: true,
   },
 ];

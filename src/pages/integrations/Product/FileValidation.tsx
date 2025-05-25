@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { Alert, Modal, Button } from "react-bootstrap";
 import MappingTable from "./MappingTable";
 
@@ -354,6 +354,71 @@ const validateUnmappedTags = (xmlContent: string, currentMappings: Record<string
   return errors;
 };
 
+const validateFieldContents = (xmlContent: string, currentMappings: Record<string, string>): ValidationError[] => {
+  const errors: ValidationError[] = [];
+
+  const getTagContent = (tagName: string): string[] => {
+    if (!tagName) return [];
+
+    // Try both with and without g: prefix
+    const patterns = [tagName, `g:${tagName}`, tagName.replace("g:", "")];
+
+    // Special handling for price tags
+    if (tagName === "original_price") {
+      patterns.push("price", "g:price");
+    } else if (tagName === "discounted_price") {
+      patterns.push("sale_price", "g:sale_price");
+    }
+
+    for (const pattern of patterns) {
+      const regex = new RegExp(`<${pattern}[^>]*>([^<]+)</${pattern}>`, "g");
+      const matches = [...xmlContent.matchAll(regex)];
+      if (matches.length > 0) {
+        return matches.map((match) => match[1].trim());
+      }
+    }
+    return [];
+  };
+
+  // Check mandatory fields for empty values
+  MANDATORY_TAGS.forEach(({ tag, label }) => {
+    const mappedTag = currentMappings[`text_${tag}`] || tag;
+    const content = getTagContent(mappedTag);
+
+    if (content.some((value) => value.trim() === "")) {
+      errors.push({
+        field: tag,
+        message: `Empty value found for mandatory field: ${label}`,
+      });
+    }
+  });
+
+  // Validate price fields are numerical
+  const priceFields = [
+    { tag: "original_price", label: "Original Price" },
+    { tag: "discounted_price", label: "Discounted Price" },
+  ];
+
+  priceFields.forEach(({ tag, label }) => {
+    const mappedTag = currentMappings[`text_${tag}`] || tag;
+    const content = getTagContent(mappedTag);
+
+    content.forEach((price) => {
+      // Remove currency symbols and whitespace
+      const cleanPrice = price.replace(/[$€£¥₺]/g, "").trim();
+      // Check if the remaining string is a valid number
+      if (!/^\d+(\.\d+)?$/.test(cleanPrice)) {
+        errors.push({
+          field: tag,
+          message: `Invalid price format for ${label}: "${price}". Price must be a numerical value.`,
+        });
+      }
+    });
+  });
+
+  return errors;
+};
+
 const FileValidation: FC<FileValidationProps> = ({ xmlContent }): JSX.Element => {
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -463,7 +528,11 @@ const FileValidation: FC<FileValidationProps> = ({ xmlContent }): JSX.Element =>
     const mandatoryTagErrors = validateMandatoryTags(rawXML, currentMappings);
     errors.push(...mandatoryTagErrors);
 
-    // 2. Validate category hierarchy
+    // 2. Validate field contents (empty checks and numerical prices)
+    const fieldContentErrors = validateFieldContents(rawXML, currentMappings);
+    errors.push(...fieldContentErrors);
+
+    // 3. Validate category hierarchy
     const mappedCategoryCode = currentMappings["text_category_code"];
     const mappedCategoryName = currentMappings["text_category_name"];
 
@@ -480,7 +549,7 @@ const FileValidation: FC<FileValidationProps> = ({ xmlContent }): JSX.Element =>
     const categoryErrors = validateCategoryHierarchy(rawXML, categoryCodeTag, categoryNameTag);
     errors.push(...categoryErrors);
 
-    // 3. Check for unmapped tags
+    // 4. Check for unmapped tags
     const unmappedTagWarnings = validateUnmappedTags(rawXML, currentMappings);
 
     // Format final results

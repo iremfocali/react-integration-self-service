@@ -21,8 +21,8 @@ const CONFIG = {
   },
   DEFAULT_PRODUCT_TAGS: ["item", "product", "Article", "Product", "Item"],
   PORT: process.env.PORT || 3001,
-  TEST_XML_PATH: "../../src/data/pcardin.xml",
-  // TEST_XML_PATH: "../../src/data/sample.xml",
+  // TEST_XML_PATH: "../../src/data/pcardin.xml",
+  TEST_XML_PATH: "../../src/data/sample.xml",
 };
 
 app.use(cors({ origin: CONFIG.URLS.FRONTEND }));

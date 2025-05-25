@@ -13,6 +13,7 @@ export interface ChildrenItemProps {
   icon?: string;
   badge?: string;
   badgecolor?: string;
+  hidden?: boolean;
 }
 
 export interface DashboardMenuProps {
@@ -24,6 +25,7 @@ export interface DashboardMenuProps {
   icon?: string;
   badge?: string;
   badgecolor?: string;
+  hidden?: boolean;
 }
 
 export interface CustomToggleProps {

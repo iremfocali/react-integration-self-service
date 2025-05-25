@@ -1,6 +1,6 @@
 export const BasicCardCode = `  
 <Card style={{ width: '18rem' }}>
-    <Card.Img variant="top" src="https://fakeimg.pl/640x360/?text=Image Placeholder" />
+    <Card.Img variant="top" src="https://placehold.co/640x360/789/fff?text=Image+Placeholder" />
     <Card.Body>
         <Card.Title>Card Title</Card.Title>
         <Card.Text>
@@ -54,7 +54,7 @@ export const ListGroups2Code = `
 
 export const CardImagesCode = `   
 <Card style={{ width: '18rem' }}>
-    <Card.Img variant="top" src="https://fakeimg.pl/640x360/?text=Image Placeholder" />
+    <Card.Img variant="top" src="https://placehold.co/640x360/789/fff?text=Image+Placeholder" />
     <Card.Body>
         <Card.Text>
             Some quick example text to build on the card title and make up the bulk of the card's content.
@@ -145,7 +145,7 @@ export const TextAlignmentCode = `
 
 export const ImagesTopBottomCode = `   
 <Card>
-    <Card.Img variant="top" src="https://fakeimg.pl/640x360/?text=Image Placeholder" />
+    <Card.Img variant="top" src="https://placehold.co/640x360/789/fff?text=Image+Placeholder" />
     <Card.Body>
         <Card.Title>Card title</Card.Title>
         <Card.Text>
@@ -169,13 +169,13 @@ export const ImagesTopBottomCode = `
             <small className="text-muted">Last updated 3 mins ago</small>
         </Card.Text>
     </Card.Body>
-    <Card.Img variant="bottom" src="https://fakeimg.pl/640x360/?text=Image Placeholder" />
+    <Card.Img variant="bottom" src="https://placehold.co/640x360/789/fff?text=Image+Placeholder" />
 </Card>
 `.trim();
 
 export const ImageOverlaysCode = `   
 <Card className="bg-dark text-white">
-    <Card.Img variant="bottom" src="https://fakeimg.pl/640x360/?text=Image Placeholder" />
+    <Card.Img variant="bottom" src="https://placehold.co/640x360/789/fff?text=Image+Placeholder" />
     <Card.ImgOverlay>
         <Card.Title>Card title</Card.Title>
         <Card.Text>
@@ -187,19 +187,6 @@ export const ImageOverlaysCode = `
 </Card>
 `.trim();
 
-export const CardsCode = [
-	BasicCardCode,
-	CardBodyCode,
-	TitlesTextLinksCode,
-	ListGroups1Code,
-	ListGroups2Code,
-	CardImagesCode,
-	KitchenSinkCode,
-	HeaderFooterCode,
-	HeaderFooterCode2,
-	TextAlignmentCode,
-	ImagesTopBottomCode,
-	ImageOverlaysCode
-];
+export const CardsCode = [BasicCardCode, CardBodyCode, TitlesTextLinksCode, ListGroups1Code, ListGroups2Code, CardImagesCode, KitchenSinkCode, HeaderFooterCode, HeaderFooterCode2, TextAlignmentCode, ImagesTopBottomCode, ImageOverlaysCode];
 
 export default CardsCode;

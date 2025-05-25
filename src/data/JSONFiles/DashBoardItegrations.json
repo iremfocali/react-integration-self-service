@@ -4,37 +4,37 @@
       "title": "GTM Integration",
       "description": "Customer events on your website will received by Visilabs via Google Tag Manager integration.",
       "button": "/integrations/event/gtm",
-      "image": "https://fakeimg.pl/640x360/?text=GTM+Integration"
+      "image": "https://placehold.co/640x360/789/fff?text=GTM+Integration"
     },
     "Direct Integration": {
       "title": "Direct Integration",
       "description": "Provided event codes should be embedded to your website by your frontend developer.",
       "button": "/integrations/event/direct",
-      "image": "https://fakeimg.pl/640x360/?text=Direct+Integration"
+      "image": "https://placehold.co/640x360/789/fff?text=Direct+Integration"
     },
     "Server Side": {
       "title": "Server Side",
       "description": "Send your customer events using backend code by backend developer.",
       "button": "/integrations/event/server",
-      "image": "https://fakeimg.pl/640x360/?text=Server+Side+Integration"
+      "image": "https://placehold.co/640x360/789/fff?text=Server+Side+Integration"
     }
   },
   "product": {
     "title": "Product Integration",
     "description": "Share your product catalog with Visilabs to create personalized recommendations.",
     "button": "/integrations/product",
-    "image": "https://fakeimg.pl/640x360/?text=Product+Integration"
+    "image": "https://placehold.co/640x360/789/fff?text=Product+Integration"
   },
   "offline": {
     "title": "Offline Integration",
     "description": "Connect your offline data with online customer profiles for omnichannel marketing.",
     "button": "/integrations/offline",
-    "image": "https://fakeimg.pl/640x360/?text=Offline+Integration"
+    "image": "https://placehold.co/640x360/789/fff?text=Offline+Integration"
   },
   "webpush": {
     "title": "Web Push Integration",
     "description": "Send web push notifications to your customers through Visilabs platform.",
     "button": "/integrations/webpush",
-    "image": "https://fakeimg.pl/640x360/?text=Web+Push+Integration"
+    "image": "https://placehold.co/640x360/789/fff?text=Web+Push+Integration"
   }
 }

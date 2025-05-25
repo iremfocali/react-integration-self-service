@@ -1,13 +1,13 @@
 export const SlidesOnlyCode = `   
 <Carousel controls={false} indicators={false} >
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />                                    
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide" />                                   
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide" />                                   
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide"/>                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide"/>                                    
     </Carousel.Item>
 </Carousel>
 `.trim();
@@ -15,13 +15,13 @@ export const SlidesOnlyCode = `
 export const WithControlCode = `   
 <Carousel indicators={false}>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />                                    
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide" />                                   
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide" />                                   
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide"/>                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide"/>                                    
     </Carousel.Item>                               
 </Carousel>
 `.trim();
@@ -29,13 +29,13 @@ export const WithControlCode = `
 export const WithIndicatorsCode = `   
 <Carousel indicators>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />                                    
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide" />                                   
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide" />                                   
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide"/>                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide"/>                                    
     </Carousel.Item>  
 </Carousel>
 `.trim();
@@ -82,13 +82,13 @@ render(<ControlledCarousel />);
 export const CrossfadeCode = `   
 <Carousel fade indicators={false}>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />                                    
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide" />                                   
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide" />                                   
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide"/>                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide"/>                                    
     </Carousel.Item>
 </Carousel>
 `.trim();
@@ -96,13 +96,13 @@ export const CrossfadeCode = `
 export const IndividualCode = `   
 <Carousel indicators={false}>
     <Carousel.Item interval={1000}>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />                                    
     </Carousel.Item>
     <Carousel.Item interval={500}>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide" />                                    
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide" />                                    
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide" />                                    
     </Carousel.Item>
 </Carousel>
 `.trim();
@@ -110,21 +110,21 @@ export const IndividualCode = `
 export const DarkVariantCode = `   
 <Carousel variant="dark">
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="First slide" />
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="First slide" />
         <Carousel.Caption>
         <h5>First slide label</h5>
         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
         </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Second slide"/>
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Second slide"/>
         <Carousel.Caption>
         <h5>Second slide label</h5>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item>
-        <Image className="d-block w-100" src="https://fakeimg.pl/1140x350/?text=Image%20Placeholder" alt="Third slide"/>
+        <Image className="d-block w-100" src="https://placehold.co/1140x350/789/fff?text=Image+Placeholder" alt="Third slide"/>
         <Carousel.Caption>
         <h5>Third slide label</h5>
         <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
@@ -133,14 +133,6 @@ export const DarkVariantCode = `
 </Carousel>
 `.trim();
 
-export const CarouselsCode = [
-	SlidesOnlyCode,
-	WithControlCode,
-	WithIndicatorsCode,
-	WithCaptionCode,
-	CrossfadeCode,
-	IndividualCode,
-	DarkVariantCode
-];
+export const CarouselsCode = [SlidesOnlyCode, WithControlCode, WithIndicatorsCode, WithCaptionCode, CrossfadeCode, IndividualCode, DarkVariantCode];
 
 export default CarouselsCode;
