@@ -1,0 +1,242 @@
+Web sitenizde event entegrasyonunu hızlandırmak için DataLayer entegrasyonunu aşağıdaki şablonu kullanarak gerçekleştirebilirsiniz. Dokümandaki event’ler için web sitenizden toplamak istediğiniz verileri ve gerçekleştireceğiniz kurguları göz önünde bulundurarak şablonu uygulamanız durumunda web event entegrasyon süresi kısalacağı gibi sonraki kurgular için de bir standart oluşturulmuş olacak. DataLayer’a eklenen bu hazır event’ler farklı 3rd party ürünlerle entegrasyonlarınızda da kullanılabilir durumda olacaklar. 
+
+Event şablon implementasyonuna başlamadan önce lütfen web siteniz üzerinde Google Tag Manager (GTM) ve DataLayer implementasyonu yapılmış olduğundan emin olun. 
+
+Üye Girişi - Login Event
+Kayıtlı olan üye giriş yaptığı zaman DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+//Login
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-Login",
+  vl_userID: "ID or email of user" // Required - Reference Value
+  });
+Yeni Kayıt - Sign Up
+Üye yeni kayıt olduğunda DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+// Signup
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-Signup",
+  vl_userID: "ID or email of user" // Required - Reference Value
+  });
+Sitede Arama - Onsite Search
+Site içinde yapılan aramalardan sonra DataLayer’a data gönderilir.
+
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-SearchResultView",
+  vl_search: {
+  word: "Searched Word", // Required
+  result: "Product Count Of Founded Search Result" // Optional
+      }
+  });
+Kategori Sayfası Görüntüleme - Category Page View
+Site içerisinde bir kategoriye giriş yapıldığında  DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-CategoryView",
+  vl_category_id: "Category ID" // Required
+  });
+Ürün Görüntüleme - Product View
+Ürün görüntülendiğinde DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-ProductDetailView",
+  'vl_ecommerce': {
+  'detail': {
+  'product': {
+  'name': 'Product Name',  // Required
+  'id': 'Product Code', // Required
+  'price': 'Product Price', // Required
+  'stock': 'Product Stock', // Required
+  'brand': 'Product Brand', // Optional
+  'category': 'Product Category', // Optional
+  'item_group_id': 'Product variantID' // Optional
+             }
+           }
+         }
+  });
+Sepete Ürün Ekleme - Add To Cart
+Sepete ürün eklemesi yada silinmesi durumunda  DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-CartView",
+  'vl_ecommerce': {
+  'cart': {
+  'basket_id': 'Unique Basket ID', // Required
+  'products': [
+               {
+  'id': 'Product Code', // Required
+  'price': 'Product Price', // Required
+  'qty': 'Product Quantity', // Required
+  'brand': 'Product Brand', // Optional
+  'item_group_id': 'Product variantID' // Optional
+             },
+             {
+  'id': 'Product Code', // Required
+  'price': 'Product Price', // Required
+  'qty': 'Product Quantity', // Required
+  'brand': 'Product Brand', // Optional
+  'item_group_id': 'Product variantID' // Optional
+             }
+             ]
+          }
+        }
+ });
+Favorilere Ürün Ekleme/Çıkarma - Add or Remove Favorites
+Favoriye ürün eklendiğinde yada çıkarıldığında DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+// Ekleme
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-AddFav",
+  vl_product: {
+  id: "Product Code", // Required
+  qty: "1", // Required
+  price: "Product Price" // Required
+     }
+ });
+ // Çıkarma
+ dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-RemoveFav",
+  vl_product: {
+  id: "Product Code", // Required
+  qty: "-1", // Required
+  price: "Product Price" // Required
+     }
+ });
+Ürün Satın Alma - Product Purchase
+Ürün satın alması gerçekleştikten sonra DataLayer’a data gönderilir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-PurchaseView",
+  'vl_ecommerce': {
+  'checkout': {
+  'purchase_id': 'Receipt ID', // Required
+  'vl_userID': "ID or email of user", // Required - Reference Value
+  'products': [
+               {
+  'id': 'Product Code', // Required
+  'qty': 'Product Quantity', // Required
+  'price': 'Product Price', // Required
+  'brand': 'Product Brand', // Optional
+  'item_group_id': 'Product variantID' // Optional
+             },
+             {
+  'id': 'Product Code', // Required
+  'qty': 'Product Quantity', // Required
+  'price': 'Product Price', // Required
+  'brand': 'Product Brand', // Optional
+  'item_group_id': 'Product variantID' // Optional
+             }
+             ]
+          }
+        }
+ });
+Sayfa Görüntüleme - PageView
+Yukarda belirtilen sayfalar hariç tüm sayfalarda DataLayer‘a  gönderilmesi gereken kod aşağıdaki gibidir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örneği
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-PageView"
+ });
+Özel Event Tanımlanması  - Custom Event 
+Web sayfası üzerinde yukarıda belirtilen hali hazırdaki event'lere ek olarak gönderilmek istenen bir event var ise DataLayer’a data gönderilir. Bu data ister DataLayer içerisinde bir dizi istenirse de sadece parametre-değer şeklinde gönderilebilir.
+
+ 
+
+Kullanılacak Parametreler
+
+Bu parametrelerin müşterinin göndereceği data tipi ve adedine göre Entegrasyon ekibi tarafından RMC panelinde oluşturulması gerekmektedir.
+
+ 
+
+DataLayer’a gönderilmesi gereken data örnekleri
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-CustomEventType1",
+  'vl_ecommerce': {
+  'detail': {
+  'CustomEventArray': {
+  'Attribute1': 'Attribute1 Value',  // Required
+  'Attribute2': 'Attribute2 Value', // Required
+  'AttributeN': 'AttributeN Value' // Required
+            }
+          }
+        }
+ });
+ya da 
+
+ 
+
+
+
+dataLayer.push({
+  event: "vlEvent",
+  vl_label: "VL-CustomEventType2",
+  vl_CustomEventAttribute1: "Attribute1 Value", // Required
+  vl_CustomEventAttribute2: "Attribute2 Value", // Required
+  vl_CustomEventAttributeN: "AttributeN Value", // Required
+ });

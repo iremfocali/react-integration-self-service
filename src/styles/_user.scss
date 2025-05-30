@@ -38,3 +38,26 @@
   border: 2px solid #dc3545 !important;
   box-shadow: 0 0 0 1px #dc3545 !important;
 }
+
+// Modal fade animation
+.modal {
+  &.fade {
+    transition: opacity 0.15s linear;
+
+    &.show {
+      opacity: 1;
+    }
+  }
+}
+
+// Modal fade animation scoped for EventGTM component
+.event-gtm-modal {
+  &.modal.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+
+    &.show {
+      opacity: 1;
+    }
+  }
+}

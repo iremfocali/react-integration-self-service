@@ -17,7 +17,7 @@ const ChangeLog = () => {
           </div>
         </Col>
       </Row>
-      {/* <Version_01_00_00 /> */}
+      <Version_01_00_00 />
     </Container>
   );
 };

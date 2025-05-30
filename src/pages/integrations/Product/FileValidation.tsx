@@ -232,6 +232,15 @@ const extractCurrency = (price: string): string | null => {
   return null;
 };
 
+const isValidUrl = (url: string): boolean => {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 const validateMandatoryTags = (xmlContent: string, currentMappings: Record<string, string>): ValidationError[] => {
   const errors: ValidationError[] = [];
 
@@ -380,15 +389,39 @@ const validateFieldContents = (xmlContent: string, currentMappings: Record<strin
     return [];
   };
 
-  // Check mandatory fields for empty values
+  // Check mandatory fields for empty, null, or undefined values
   MANDATORY_TAGS.forEach(({ tag, label }) => {
     const mappedTag = currentMappings[`text_${tag}`] || tag;
     const content = getTagContent(mappedTag);
 
-    if (content.some((value) => value.trim() === "")) {
+    // Check if the field exists and has content
+    if (content.length === 0) {
       errors.push({
         field: tag,
-        message: `Empty value found for mandatory field: ${label}`,
+        message: `Missing value for mandatory field: ${label}`,
+      });
+      return;
+    }
+
+    // Check for empty, null, or undefined values
+    content.forEach((value) => {
+      if (!value || value.trim() === "" || value.toLowerCase() === "null" || value.toLowerCase() === "undefined") {
+        errors.push({
+          field: tag,
+          message: `Invalid value found for ${label}: Value cannot be empty, null, or undefined`,
+        });
+      }
+    });
+
+    // URL validation for specific fields
+    if (tag === "product_url" || tag === "medium_image") {
+      content.forEach((url) => {
+        if (!isValidUrl(url)) {
+          errors.push({
+            field: tag,
+            message: `Invalid URL format in <${mappedTag}>. URL must start with http:// or https://`,
+          });
+        }
       });
     }
   });

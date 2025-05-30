@@ -204,7 +204,15 @@ function processXMLContent(content, customTag = "") {
 app.post("/validate", async (req, res) => {
   try {
     console.log("Handling /validate request");
-    const { url = CONFIG.URLS.DEFYA, customTag } = req.body;
+    const { url, customTag } = req.body;
+
+    if (!url || !url.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: "URL is required",
+      });
+    }
+
     const xmlContent = await fetchAndProcessXML(url);
     const result = await processXMLContent(xmlContent, customTag);
     res.json(result);
