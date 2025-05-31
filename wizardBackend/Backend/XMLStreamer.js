@@ -80,26 +80,57 @@ async function fetchAndProcessXML(url) {
  * Process XML content using SAX parser
  */
 function sanitizeXML(xml) {
-  // This regex replaces '>' in tag contents that are not part of tags
-  return xml.replace(/>([^<]*?)>([^<]*?)</g, (match, p1, p2) => {
-    return `>${p1}&gt;${p2}<`;
-  });
+  // Enhanced sanitization for common XML issues
+  return (
+    xml
+      // Replace '>' in tag contents that are not part of tags
+      .replace(/>([^<]*?)>([^<]*?)</g, (match, p1, p2) => `>${p1}&gt;${p2}<`)
+      // Fix self-closing tags that are malformed
+      .replace(/([^/]>)\s*</g, "$1\n<")
+      // Remove invalid characters
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, "")
+      // Fix double closing tags
+      .replace(/<\/([^>]*)><\/\1>/g, "</$1>")
+      // Normalize whitespace
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
 
 function processXMLContent(content, customTag = "") {
   return new Promise((resolve, reject) => {
-    const parser = sax.parser(true); // strict mode
+    const parser = sax.parser(true, {
+      trim: true,
+      normalize: true,
+      lowercase: false,
+      xmlns: true,
+      position: true,
+    });
+
     let currentProduct = null;
     let currentTag = "";
     let nestedLevel = 0;
     let nestedTags = [];
     let foundFirstProduct = false;
     let hasFinishedFirstProduct = false;
+    let errorCount = 0;
+    const MAX_ERRORS = 10;
 
     const productTags = getProductTags(customTag);
 
-    // ✅ Sanitize malformed characters
-    const sanitizedContent = sanitizeXML(content);
+    // Enhanced error handling
+    parser.onerror = (error) => {
+      errorCount++;
+      console.warn(`XML parsing warning at line ${parser.line}, column ${parser.column}: ${error.message}`);
+
+      if (errorCount > MAX_ERRORS) {
+        reject(new Error(`Too many XML parsing errors (${errorCount}). The XML file may be severely malformed.`));
+        return;
+      }
+
+      // Try to continue parsing despite errors
+      parser.resume();
+    };
 
     parser.onopentag = (node) => {
       if (hasFinishedFirstProduct) return;
@@ -188,14 +219,11 @@ function processXMLContent(content, customTag = "") {
       });
     };
 
-    parser.onerror = (error) => {
-      reject(new Error(`XML parsing failed: ${error.message}`));
-    };
-
     try {
-      parser.write(sanitizedContent).close(); // 🔁 Use sanitized XML
+      const sanitizedContent = sanitizeXML(content);
+      parser.write(sanitizedContent).close();
     } catch (error) {
-      reject(new Error(`XML processing failed: ${error.message}`));
+      reject(new Error(`XML processing failed: ${error.message}\nLine: ${parser.line}, Column: ${parser.column}`));
     }
   });
 }
@@ -213,7 +241,16 @@ app.post("/validate", async (req, res) => {
       });
     }
 
+    console.log(`Processing URL: ${url}`);
     const xmlContent = await fetchAndProcessXML(url);
+
+    if (!xmlContent) {
+      return res.status(400).json({
+        success: false,
+        error: "Empty XML content received",
+      });
+    }
+
     const result = await processXMLContent(xmlContent, customTag);
     res.json(result);
   } catch (error) {
@@ -221,6 +258,10 @@ app.post("/validate", async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message,
+      details: {
+        message: "The XML file appears to be malformed. Common issues include:",
+        possibleSolutions: ["Mismatched opening/closing tags", "Invalid characters in the XML", "Improper nesting of elements"],
+      },
     });
   }
 });
