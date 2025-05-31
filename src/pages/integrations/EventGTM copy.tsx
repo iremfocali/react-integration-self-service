@@ -832,7 +832,7 @@ const EventGTM = () => {
       {renderNewTagModal()}
       {/* burada yapilan islem her bir event kartinda Test Event butonunda calisacak */}
       <div className='d-grid gap-2 d-md-flex justify-content-md-end my-2'>
-        <Button>Create GTM Export</Button>
+        <a href="../data/JSONFiles/SampleGTMExportOriginal.json" download>Create GTM Export</a>
       </div>
     </Container>
   );

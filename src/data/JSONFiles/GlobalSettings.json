@@ -1,0 +1,12 @@
+{
+    "oid": "3123123123213",
+    "sid": "123123123",
+    "refference": "Email or KeyID",
+    "domain": "deneme.com",
+    "serverSideRequestUrl": "https://deneme.com/api/v1/serverSideRequest",
+    "webPushScriptUrl": "https://deneme.com/api/v1/webPushScript",
+    "webPushWorkerFile": "https://deneme.com/api/v1/webPushWorkerFile",
+    "company": "Brand Name",
+    "modules": ["webPush", "Targeting", "CDP", "Analytics"]
+
+}

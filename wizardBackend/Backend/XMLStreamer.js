@@ -239,7 +239,7 @@ app.post("/parse-local", async (req, res) => {
 
 // Server initialization
 app.listen(CONFIG.PORT, () => {
-  console.log(`XML Parser running at: http://localhost:${CONFIG.PORT}`);
+  console.log(`✅ XML Parser running at: http://localhost:${CONFIG.PORT}`);
   console.log(`Frontend URL: ${CONFIG.URLS.FRONTEND}`);
   console.log(`Supported product tags: ${CONFIG.DEFAULT_PRODUCT_TAGS.join(", ")}`);
 });
