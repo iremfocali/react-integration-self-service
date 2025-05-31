@@ -15,16 +15,17 @@ interface NestedTag {
 
 const Product: FC = () => {
   const defaultTags = ["item", "product", "Article", "Product", "Item"];
+
   // State Management
   const [loading, setLoading] = useState<boolean>(false);
-  const [localLoading, setLocalLoading] = useState<boolean>(false);
   const [xmlData, setXmlData] = useState<string | null>(null);
   const [nestedTags, setNestedTags] = useState<NestedTag[]>([]);
   const [showNestedWarning, setShowNestedWarning] = useState<boolean>(false);
-  const [xmlUrl, setXmlUrl] = useState<string>("https://www.defya.com.tr/XMLExport/30C05A9154B14A65AF058F8CF7403661");
+  const [xmlUrl, setXmlUrl] = useState<string>("");
   const [customTag, setCustomTag] = useState<string>("");
   const [hasAddedCustomTag, setHasAddedCustomTag] = useState<boolean>(false);
   const [supportedTags, setSupportedTags] = useState<string[]>(defaultTags);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAddToDefaultTags = () => {
     if (customTag.trim() && !hasAddedCustomTag) {
@@ -34,8 +35,18 @@ const Product: FC = () => {
   };
 
   const handleParseXML = async () => {
+    setError(null); // Clear previous errors
+
     if (!xmlUrl.trim()) {
-      alert("Please enter a valid XML URL");
+      setError("Please enter a valid XML URL");
+      return;
+    }
+
+    // Basic URL validation
+    try {
+      new URL(xmlUrl);
+    } catch {
+      setError("Please enter a valid URL format (e.g., https://example.com/feed.xml)");
       return;
     }
 
@@ -57,7 +68,8 @@ const Product: FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -79,48 +91,9 @@ const Product: FC = () => {
       }
     } catch (error) {
       console.error("Error parsing XML:", error);
-      alert("Failed to parse XML file. Please check the console for details.");
+      setError(error instanceof Error ? error.message : "Failed to parse XML file. Please check the console for details.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleTestLocalXML = async () => {
-    setLocalLoading(true);
-    try {
-      const response = await fetch(`http://localhost:3001/parse-local${customTag ? `?customTag=${encodeURIComponent(customTag.trim())}` : ""}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Received response:", data);
-
-      if (data.success && data.xmlString) {
-        setXmlData(data.xmlString);
-        console.log("Parsed Local XML data:", data.xmlString);
-
-        if (data.hasProblematicNesting) {
-          setNestedTags(data.nestedTags);
-          setShowNestedWarning(true);
-        } else {
-          setNestedTags([]);
-          setShowNestedWarning(false);
-        }
-      } else {
-        throw new Error(data.error || "Failed to parse local XML");
-      }
-    } catch (error) {
-      console.error("Error parsing local XML:", error);
-      alert("Failed to parse local XML file. Please check the console for details.");
-    } finally {
-      setLocalLoading(false);
     }
   };
 
@@ -139,7 +112,16 @@ const Product: FC = () => {
                 {/* URL Input */}
                 <div className='d-flex flex-column gap-2'>
                   <InputGroup>
-                    <Form.Control type='text' className='form-control rounded-start' placeholder='Enter your XML URL' value={xmlUrl} onChange={(e) => setXmlUrl(e.target.value)} />
+                    <Form.Control
+                      type='text'
+                      className='form-control rounded-start'
+                      placeholder='Enter your XML URL'
+                      value={xmlUrl}
+                      onChange={(e) => {
+                        setXmlUrl(e.target.value);
+                        setError(null); // Clear error when user types
+                      }}
+                    />
                     <InputGroup.Text className='p-0 rounded-end'>
                       <Button variant={xmlData ? "outline-success" : "outline-info"} className='border-0 h-100' onClick={handleParseXML} disabled={loading || !xmlUrl.trim()}>
                         {loading ? (
@@ -157,20 +139,15 @@ const Product: FC = () => {
                     </InputGroup.Text>
                   </InputGroup>
 
-                  {/* Test Local XML Button */}
-                  <Button variant='outline-warning' onClick={handleTestLocalXML} disabled={localLoading}>
-                    {localLoading ? (
-                      <>
-                        <span className='spinner-border spinner-border-sm me-1' />
-                        Testing...
-                      </>
-                    ) : (
-                      <>
-                        <i className='fe fe-file me-1'></i>
-                        Test Local XML
-                      </>
-                    )}
-                  </Button>
+                  {/* Error Alert */}
+                  {error && (
+                    <Alert variant='danger' className='mb-0 mt-2'>
+                      <div className='d-flex align-items-center'>
+                        <i className='fe fe-alert-circle me-2'></i>
+                        {error}
+                      </div>
+                    </Alert>
+                  )}
                 </div>
 
                 {/* Warning Alerts */}

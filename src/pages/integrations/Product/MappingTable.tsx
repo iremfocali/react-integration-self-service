@@ -1,5 +1,5 @@
 import { FC, useState, useMemo } from "react";
-import { Table, Form, Badge, Button } from "react-bootstrap";
+import { Table, Form, Button } from "react-bootstrap";
 
 interface MappingTableProps {
   onCustomMappingChange?: (name: string, value: string) => void;
