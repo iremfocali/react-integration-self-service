@@ -1,6 +1,12 @@
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const axios = require("axios");
 
-const baseUrl = "https://www.relateddigital.com";
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
 const filePath = "/relatedpush_sw.js";
 
 async function checkFile(url, path) {
@@ -8,17 +14,49 @@ async function checkFile(url, path) {
   try {
     const response = await axios.head(fullUrl, { timeout: 5000 });
     if (response.status === 200) {
-      console.log(`[✓] Dosya bulundu: ${fullUrl}`);
+      return {
+        success: true,
+        message: `[✓] Dosya bulundu: ${fullUrl}`,
+        status: response.status
+      };
     } else {
-      console.log(`[✗] Dosya erişilemedi: ${fullUrl} - Durum: ${response.status}`);
+      return {
+        success: false,
+        message: `[✗] Dosya erişilemedi: ${fullUrl} - Durum: ${response.status}`,
+        status: response.status
+      };
     }
   } catch (error) {
     if (error.response) {
-      console.log(`[✗] ${fullUrl} - HTTP Durumu: ${error.response.status}`);
+      return {
+        success: false,
+        message: `[✗] ${fullUrl} - HTTP Durumu: ${error.response.status}`,
+        status: error.response.status
+      };
     } else {
-      console.log(`[!] Hata oluştu: ${fullUrl} - ${error.message}`);
+      return {
+        success: false,
+        message: `[!] Hata oluştu: ${fullUrl} - ${error.message}`,
+        status: 500
+      };
     }
   }
 }
 
-checkFile(baseUrl, filePath);
+app.post('/api/service-worker/check', async (req, res) => {
+  const { baseUrl } = req.body;
+  if (!baseUrl) {
+    return res.status(400).json({
+      success: false,
+      message: "Base URL gerekli"
+    });
+  }
+  const result = await checkFile(baseUrl, filePath);
+  res.json(result);
+});
+
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`ServiceWorkerChecker API ${PORT} portunda çalışıyor`);
+});
+
