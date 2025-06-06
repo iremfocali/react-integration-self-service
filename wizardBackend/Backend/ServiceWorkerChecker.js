@@ -10,19 +10,20 @@ app.use(bodyParser.json());
 const filePath = "/relatedpush_sw.js";
 
 async function checkFile(url, path) {
-  const fullUrl = url + path;
+  const cleanUrl = url.replace(/\/+$/, '');
+  const fullUrl = cleanUrl + path;
   try {
     const response = await axios.head(fullUrl, { timeout: 5000 });
     if (response.status === 200) {
       return {
         success: true,
-        message: `[✓] Dosya bulundu: ${fullUrl}`,
+        message: `Service worker dosyası bulundu! (${fullUrl})`,
         status: response.status
       };
     } else {
       return {
         success: false,
-        message: `[✗] Dosya erişilemedi: ${fullUrl} - Durum: ${response.status}`,
+        message: `Service worker dosyasına ulaşılamadı. (Durum: ${response.status})`,
         status: response.status
       };
     }
@@ -30,13 +31,13 @@ async function checkFile(url, path) {
     if (error.response) {
       return {
         success: false,
-        message: `[✗] ${fullUrl} - HTTP Durumu: ${error.response.status}`,
+        message: `Service worker dosyasına ulaşılamadı. (Durum: ${error.response.status})`,
         status: error.response.status
       };
     } else {
       return {
         success: false,
-        message: `[!] Hata oluştu: ${fullUrl} - ${error.message}`,
+        message: `Bir hata oluştu, lütfen adresi ve bağlantınızı kontrol edin.`,
         status: 500
       };
     }

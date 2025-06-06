@@ -76,6 +76,7 @@ export const DashboardMenu: DashboardMenuProps[] = [
         name: "Forget Password",
       },
     ],
+    hidden: true,
   },
   {
     id: uuid(),

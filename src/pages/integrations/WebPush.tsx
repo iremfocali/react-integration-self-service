@@ -11,32 +11,57 @@ interface ApiResponse {
 }
 
 const WebPush: FC = () => {
-  const [checkResult, setCheckResult] = useState("");
+  const [swResult, setSwResult] = useState("");
+  const [scriptResult, setScriptResult] = useState("");
   const [baseUrl, setBaseUrl] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSwLoading, setIsSwLoading] = useState(false);
+  const [isScriptLoading, setIsScriptLoading] = useState(false);
 
   const checkServiceWorker = async () => {
     if (!baseUrl) {
-      setCheckResult("[!] Lütfen bir Base URL giriniz");
+      setSwResult("[!] Lütfen bir Base URL giriniz");
       return;
     }
-
-    setIsLoading(true);
-    setCheckResult(""); // Önceki sonucu temizle
+    setIsSwLoading(true);
+    setSwResult("");
     try {
       const { data } = await axios.post<ApiResponse>(
         "http://localhost:5000/api/service-worker/check",
         { baseUrl }
       );
-      setCheckResult(data.message);
+      setSwResult(data.message);
     } catch (error: any) {
       const msg =
         error?.response?.data?.message ||
         error?.message ||
         "Bir hata oluştu";
-      setCheckResult(msg);
+      setSwResult(msg);
     } finally {
-      setIsLoading(false);
+      setIsSwLoading(false);
+    }
+  };
+
+  const checkWebPushScript = async () => {
+    if (!baseUrl) {
+      setScriptResult("[!] Lütfen bir Base URL giriniz");
+      return;
+    }
+    setIsScriptLoading(true);
+    setScriptResult("");
+    try {
+      const { data } = await axios.post<ApiResponse>(
+        "http://localhost:5003/api/webpush-script/check",
+        { baseUrl }
+      );
+      setScriptResult(data.message);
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Bir hata oluştu";
+      setScriptResult(msg);
+    } finally {
+      setIsScriptLoading(false);
     }
   };
 
@@ -60,25 +85,46 @@ const WebPush: FC = () => {
                   value={baseUrl}
                   onChange={(e) => setBaseUrl(e.target.value)}
                   placeholder="https://example.com"
-                  disabled={isLoading}
+                  disabled={isSwLoading || isScriptLoading}
                 />
                 <Form.Text className="text-muted">
-                  Service Worker'ın kontrol edileceği sitenin Base URL'ini giriniz
+                  Kontrol edilecek sitenin Base URL'ini giriniz
                 </Form.Text>
               </Form.Group>
-              <Button
-                variant="primary"
-                onClick={checkServiceWorker}
-                className="mb-3"
-                disabled={!baseUrl || isLoading}
-              >
-                {isLoading ? "Kontrol Ediliyor..." : "Service Worker'ı Kontrol Et"}
-              </Button>
-              {checkResult && (
-                <div className="mt-2">
-                  <p className="mb-0">{checkResult}</p>
-                </div>
-              )}
+              <div className="d-flex gap-2 mb-3">
+                <Button
+                  variant="primary"
+                  onClick={checkServiceWorker}
+                  disabled={!baseUrl || isSwLoading}
+                >
+                  {isSwLoading ? "Kontrol Ediliyor..." : "Service Worker'ı Kontrol Et"}
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={checkWebPushScript}
+                  disabled={!baseUrl || isScriptLoading}
+                >
+                  {isScriptLoading ? "Kontrol Ediliyor..." : "Web Push Script'i Kontrol Et"}
+                </Button>
+              </div>
+              <Row>
+                <Col md={6}>
+                  <h6>Service Worker Sonucu</h6>
+                  {swResult && (
+                    <div className="mt-2">
+                      <p className="mb-0">{swResult}</p>
+                    </div>
+                  )}
+                </Col>
+                <Col md={6}>
+                  <h6>Web Push Script Sonucu</h6>
+                  {scriptResult && (
+                    <div className="mt-2">
+                      <p className="mb-0">{scriptResult}</p>
+                    </div>
+                  )}
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
         </Col>
