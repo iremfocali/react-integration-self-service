@@ -10,16 +10,17 @@ const upload = multer({ dest: "uploads/" });
 app.use(cors());
 
 const MIN_REQUIRED_ROWS = 3;
+const MAX_ROWS_TO_VALIDATE = 15;
 
 // Column rules
 const COLUMN_RULES = [
-  { name: "Time Stamp", required: true, type: "date", format: "YYYY-MM-DD HH:mm:ss" },
-  { name: "Customer ID", required: true, type: "string" },
-  { name: "Event Type", required: true, type: "number" },
+  { name: "RequestedMin", required: true, type: "date", format: "YYYY-MM-DD HH:mm:ss" },
+  { name: "PartnerUserId", required: true, type: "string" },
+  { name: "EventType", required: true, type: "number" },
   { name: "Category", required: false, type: "string" },
-  { name: "Event Name", required: true, type: "string" },
-  { name: "Num1", required: true, type: "number" },
-  { name: "Num2", required: true, type: "number" },
+  { name: "AppId", required: true, type: "string" },
+  { name: "SessionDurationInMinutes", required: true, type: "number" },
+  { name: "SessionPendingResourcesTimeSec", required: true, type: "number" },
 ];
 
 app.post("/upload", upload.single("csv"), (req, res) => {
@@ -32,36 +33,76 @@ app.post("/upload", upload.single("csv"), (req, res) => {
   let totalRows = 0;
   let firstRowContent = null;
   let headers = [];
+  let rowsToValidate = [];
 
-  // First pass: count total non-empty rows
+  // First pass: count total non-empty rows and validate first line
   const countRows = new Promise((resolve) => {
     const counter = readline.createInterface({
       input: fs.createReadStream(filePath, { encoding: "utf8" }),
     });
 
+    let isFirstLine = true;
+    let hasLeadingWhitespace = false;
+    let firstNonEmptyLine = null;
+    let lineNumber = 0;
+
     counter.on("line", (line) => {
-      if (line.trim()) {
-        if (firstRowContent === null) {
-          firstRowContent = line;
-          if (hasHeader) {
-            headers = line.split(";").map((header) => header.trim());
-          }
+      lineNumber++;
+
+      // Check for whitespace at the beginning
+      if (!firstNonEmptyLine && !line.trim()) {
+        hasLeadingWhitespace = true;
+        return; // Skip empty lines at the beginning
+      }
+
+      // Store the first non-empty line
+      if (!firstNonEmptyLine && line.trim()) {
+        firstNonEmptyLine = line;
+      }
+
+      if (isFirstLine) {
+        isFirstLine = false;
+        // Check if first non-empty line is empty
+        if (!line.trim()) {
+          errors.push("The first line of the file cannot be empty.");
+          return;
         }
+        // Check if first non-empty line has expected number of columns
+        const columns = line.split(";");
+        if (columns.length < 7) {
+          errors.push("Your CSV file must use semicolon (;) as a separator. Please check the separator character in your file.");
+          return;
+        }
+        firstRowContent = line;
+        if (hasHeader) {
+          headers = columns.map((header) => header.trim());
+        } else {
+          rowsToValidate.push(line);
+        }
+      } else if (line.trim()) {
         totalRows++;
+        if (rowsToValidate.length < MAX_ROWS_TO_VALIDATE) {
+          rowsToValidate.push(line);
+        }
       }
     });
 
     counter.on("close", () => {
+      // Add warning about leading whitespace if found
+      if (hasLeadingWhitespace) {
+        errors.push("Empty lines found at the beginning of the file. These lines will be ignored for validation.");
+      }
+
       // Subtract header row if exists
       const effectiveRows = hasHeader ? totalRows - 1 : totalRows;
       if (effectiveRows < MIN_REQUIRED_ROWS) {
-        errors.push(`Dosya en az ${MIN_REQUIRED_ROWS} satır içermelidir. Mevcut satır sayısı: ${effectiveRows}`);
+        errors.push(`File must contain at least ${MIN_REQUIRED_ROWS} rows. Current row count: ${effectiveRows}`);
       }
       resolve();
     });
   });
 
-  // Second pass: validate the specified row
+  // Second pass: validate the specified row and first 15 rows
   countRows.then(() => {
     if (errors.length > 0) {
       fs.unlinkSync(filePath);
@@ -87,7 +128,10 @@ app.post("/upload", upload.single("csv"), (req, res) => {
       }
       firstLine = false;
       currentRow++;
-      if (currentRow === rowNumber) {
+      // If hasHeader is true, we want to check the second data row (rowNumber + 1)
+      // If hasHeader is false, we want to check the exact rowNumber
+      const targetRowNumber = hasHeader ? rowNumber + 1 : rowNumber;
+      if (currentRow === targetRowNumber) {
         targetRow = line;
       }
     });
@@ -97,40 +141,74 @@ app.post("/upload", upload.single("csv"), (req, res) => {
       if (!targetRow) {
         return res.json({
           valid: false,
-          errors: [`Dosyada ${rowNumber}. satır bulunamadı.`],
+          errors: [`Row ${rowNumber} not found in the file.`],
           totalRows: hasHeader ? totalRows - 1 : totalRows,
           hasHeader,
           headers,
         });
       }
-      // Split only by semicolon
+
+      // Validate the target row
       const values = targetRow.split(";");
       if (values.length < 7) {
-        errors.push("CSV dosyanızda ayraç olarak noktalı virgül (;) kullanılmalıdır. Lütfen dosyanızdaki ayraç karakterini kontrol edin.");
+        errors.push("Your CSV file must use semicolon (;) as a separator. Please check the separator character in your file.");
         return res.json({
           valid: false,
           errors,
-          rowData: values,
-          rowNumber: rowNumber,
           totalRows: hasHeader ? totalRows - 1 : totalRows,
           hasHeader,
           headers,
         });
       }
-      // Validate first 7 columns
+
+      // Validate columns according to rules for target row
       COLUMN_RULES.forEach((rule, idx) => {
         const val = values[idx] !== undefined ? values[idx].trim() : "";
         if (rule.required && !val) {
-          errors.push(`${idx + 1}. sütun (${rule.name}) boş bırakılamaz.`);
+          errors.push(`Column ${idx + 1} (${rule.name}) cannot be empty.`);
           return;
         }
         if (rule.type === "date" && val && !moment(val, rule.format, true).isValid()) {
-          errors.push(`${idx + 1}. sütun (${rule.name}) geçerli bir tarih formatında olmalıdır (${rule.format}).`);
+          errors.push(`Column ${idx + 1} (${rule.name}) must be in a valid date format (${rule.format}).`);
         }
-        if (rule.type === "number" && val && isNaN(Number(val))) {
-          errors.push(`${idx + 1}. sütun (${rule.name}) sayısal bir değer olmalıdır.`);
+        if (rule.type === "number" && val) {
+          const num = Number(val.replace(",", "."));
+          if (isNaN(num)) {
+            errors.push(`Column ${idx + 1} (${rule.name}) must be a numeric value.`);
+          }
         }
       });
+
+      // Only validate first 15 rows if separator is correct
+      if (errors.length === 0) {
+        rowsToValidate.forEach((row, index) => {
+          const validateRowNumber = hasHeader ? index + 2 : index + 1;
+          const rowValues = row.split(";");
+
+          if (rowValues.length < 7) {
+            errors.push(`Row ${validateRowNumber}: Your CSV file must use semicolon (;) as a separator.`);
+            return;
+          }
+
+          COLUMN_RULES.forEach((rule, idx) => {
+            const val = rowValues[idx] !== undefined ? rowValues[idx].trim() : "";
+            if (rule.required && !val) {
+              errors.push(`Row ${validateRowNumber}, Column ${idx + 1} (${rule.name}): Cannot be empty.`);
+              return;
+            }
+            if (rule.type === "date" && val && !moment(val, rule.format, true).isValid()) {
+              errors.push(`Row ${validateRowNumber}, Column ${idx + 1} (${rule.name}): Must be in a valid date format (${rule.format}).`);
+            }
+            if (rule.type === "number" && val) {
+              const num = Number(val.replace(",", "."));
+              if (isNaN(num)) {
+                errors.push(`Row ${validateRowNumber}, Column ${idx + 1} (${rule.name}): Must be a numeric value.`);
+              }
+            }
+          });
+        });
+      }
+
       res.json({
         valid: errors.length === 0,
         errors,
@@ -145,5 +223,5 @@ app.post("/upload", upload.single("csv"), (req, res) => {
 });
 
 app.listen(3002, () => {
-  console.log("✅ Express sunucu 3002 portunda çalışıyor...");
+  console.log("✅ Express server running on port 3002...");
 });

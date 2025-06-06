@@ -1,4 +1,5 @@
-RequestedMin|PartnerUserId|ZoneName|SessionPriority|SubscriptionSKU|SessionPendingResourcesTimeSec|SessionDurationInMinutes|SessionExitResult|AppId|GameId|SessionState|SessionTerminationTime|ClientStreamer|ClientOsHeader|ClientBrowser|ClientDevice|CloudRig
+
+
 2020-05-14 10:11:34|b75bb262-3a49-4bbe-8ee2-6ec7e7e176b9|NPA-XXX-YYY-02|Low|2000-XXX|0|55.4833|Success|100013311|Fortnite|||||||
 2020-05-14 10:11:34|b75bb262-3a49-4bbe-8ee2-6ec7e7e176b9|NPA-XXX-YYY-02|Low|2000-XXX|0|55.4833|Success|100013311|Fortnite||2024-07-08 12:14:59|||||
 2020-05-14 10:11:34|b75bb262-3a49-4bbe-8ee2-6ec7e7e176b9|NPA-XXX-YYY-02|Low|2000-XXX|0|55.4833|Success|100013311|Fortnite||2024-07-08 12:14:59|||||
