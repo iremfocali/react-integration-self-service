@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, Accordion, Table, Form, Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { eventTemplates, defaultEvents, eventDescriptions } from "./data/eventData";
+import { eventTemplates, defaultEvents, eventDescriptions, DEFAULT_COOKIE_ID } from "./data/eventData";
 
 const VISILABS_BASE = "http://ssrlgr.visilabs.net/Logging.svc/SendRequest/2F46336C6A3036533961343D";
 
+interface EventParameter {
+  key: string;
+  value: string;
+  description?: string;
+  default?: boolean;
+  defaultValue?: string;
+}
+
 export default function EventRequestBuilder() {
   const [eventList, setEventList] = useState<string[]>([...defaultEvents]);
-  const [eventParams, setEventParams] = useState<Record<string, Array<{ key: string; value: string; description?: string; default?: boolean; defaultValue?: string }>>>({ ...eventTemplates });
+  const [eventParams, setEventParams] = useState<Record<string, EventParameter[]>>({ ...eventTemplates });
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({});
   const [showForm, setShowForm] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [formData, setFormData] = useState<{ key: string; value: string; description: string }>({ key: "", value: "", description: "" });
+  const [formData, setFormData] = useState<EventParameter>({ key: "", value: "", description: "" });
   const [requestUrl, setRequestUrl] = useState("");
   const [result, setResult] = useState<{ status: number; data: any } | { error: string } | null>(null);
   const [showNewEventForm, setShowNewEventForm] = useState(false);
@@ -28,6 +36,12 @@ export default function EventRequestBuilder() {
       setResult(null);
       setRequestUrl("");
     }
+  };
+
+  const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const domain = e.target.value;
+    console.log("Domain entered:", domain);
+    setUserDomain(domain);
   };
 
   const showAddForm = (index: number | null = null) => {
@@ -49,7 +63,7 @@ export default function EventRequestBuilder() {
     e.preventDefault();
     if (!selectedEvent) return;
 
-    const newParam = {
+    const newParam: EventParameter = {
       key: formData.key,
       value: formData.value,
       description: formData.description,
@@ -57,10 +71,24 @@ export default function EventRequestBuilder() {
 
     setEventParams((prev) => {
       const updatedParams = { ...prev };
-      if (editIndex !== null) {
-        updatedParams[selectedEvent][editIndex] = newParam;
-      } else {
-        updatedParams[selectedEvent] = [...updatedParams[selectedEvent], newParam];
+      const eventKey = selectedEvent as keyof typeof updatedParams;
+      const currentParams = updatedParams[eventKey];
+
+      if (editIndex !== null && currentParams) {
+        const existingParam = currentParams[editIndex];
+        if (existingParam?.default) {
+          // For default parameters, only update the value
+          currentParams[editIndex] = {
+            ...existingParam,
+            value: formData.value,
+          };
+        } else {
+          // For custom parameters, update everything
+          currentParams[editIndex] = newParam;
+        }
+      } else if (currentParams) {
+        // Adding new parameter (always non-default)
+        updatedParams[eventKey] = [...currentParams, { ...newParam, default: false }];
       }
       return updatedParams;
     });
@@ -78,10 +106,17 @@ export default function EventRequestBuilder() {
 
   const handleDelete = (index: number) => {
     if (!selectedEvent) return;
-    setEventParams((prev) => {
-      const updatedParams = { ...prev };
-      updatedParams[selectedEvent] = updatedParams[selectedEvent].filter((_, i) => i !== index);
-      return updatedParams;
+    const paramToDelete = eventParams[selectedEvent][index];
+
+    // Prevent deletion of default parameters
+    if (paramToDelete.default) {
+      console.log("Cannot delete default parameter:", paramToDelete.key);
+      return;
+    }
+
+    setEventParams({
+      ...eventParams,
+      [selectedEvent]: eventParams[selectedEvent].filter((_, i) => i !== index),
     });
   };
 
@@ -107,20 +142,44 @@ export default function EventRequestBuilder() {
 
   const buildRequestUrl = () => {
     if (!selectedEvent || !userDomain) return "";
-    const params = eventParams[selectedEvent];
-    const queryParams = params.map((p) => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`).join("&");
-    return `${VISILABS_BASE}?${queryParams}`;
+    console.log("Building request URL with domain:", userDomain);
+
+    // Get the cookie ID from parameters or use default
+    const cookieParam = eventParams[selectedEvent].find((p) => p.key === "cookieid");
+    const cookieId = cookieParam?.value || DEFAULT_COOKIE_ID;
+
+    // Clean up domain (remove trailing slashes)
+    const cleanDomain = userDomain.replace(/\/+$/, "");
+
+    // Build base URL with domain and cookieId
+    const baseUrl = `${VISILABS_BASE}/${cleanDomain}/${cookieId}`;
+
+    // Filter out cookieid from parameters and build query string
+    const queryParams = eventParams[selectedEvent]
+      .filter((p) => p.key !== "cookieid")
+      .map((p) => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)
+      .join("&");
+
+    const finalUrl = queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
+    console.log("Final Request URL:", finalUrl);
+    return finalUrl;
   };
 
   const sendRequest = async () => {
     const url = buildRequestUrl();
     if (!url) return;
 
+    console.log("Sending request to:", url);
+    setRequestUrl(url);
+
     try {
-      const response = await fetch(url);
+      // Using your proxy server to handle CORS
+      const response = await fetch(`http://localhost:5004/serverside-request?url=${encodeURIComponent(url)}`);
       const data = await response.json();
-      setResult({ status: response.status, data });
+      console.log("Response received:", data);
+      setResult({ status: response.status, data: "Request successful" });
     } catch (error) {
+      console.error("Request failed:", error);
       setResult({ error: error instanceof Error ? error.message : "An error occurred" });
     }
   };
@@ -151,7 +210,7 @@ export default function EventRequestBuilder() {
             <Card.Body>
               <Form.Group>
                 <Form.Label className='fw-bold'>Domain</Form.Label>
-                <Form.Control type='text' placeholder='Enter domain (e.g. www.example.com.tr)' value={userDomain} onChange={(e) => setUserDomain(e.target.value)} size='lg' />
+                <Form.Control type='text' placeholder='Enter domain (e.g. www.example.com.tr)' value={userDomain} onChange={handleDomainChange} size='lg' />
               </Form.Group>
             </Card.Body>
           </Card>
@@ -220,12 +279,14 @@ export default function EventRequestBuilder() {
                                       <td>{param.value}</td>
                                       <td>
                                         <div className='d-flex gap-2 justify-content-center'>
-                                          <Button variant='outline-primary' size='sm' onClick={() => showAddForm(index)} disabled={param.default}>
+                                          <Button variant='outline-primary' size='sm' onClick={() => showAddForm(index)}>
                                             <i className='fe fe-edit'></i>
                                           </Button>
-                                          <Button variant='outline-danger' size='sm' onClick={() => handleDelete(index)} disabled={param.default}>
-                                            <i className='fe fe-trash-2'></i>
-                                          </Button>
+                                          {!param.default && (
+                                            <Button variant='outline-danger' size='sm' onClick={() => handleDelete(index)}>
+                                              <i className='fe fe-trash-2'></i>
+                                            </Button>
+                                          )}
                                         </div>
                                       </td>
                                     </tr>
@@ -237,10 +298,10 @@ export default function EventRequestBuilder() {
                                 <div className='mt-2 p-2 border rounded bg-light'>
                                   <Row className='g-2'>
                                     <Col>
-                                      <Form.Control type='text' size='sm' placeholder='Parameter name' value={formData.key} onChange={(e) => setFormData((prev) => ({ ...prev, key: e.target.value }))} required />
+                                      <Form.Control type='text' size='sm' placeholder='Parameter name' value={formData.key} onChange={(e) => setFormData((prev) => ({ ...prev, key: e.target.value }))} disabled={editIndex !== null && eventParams[selectedEvent]?.[editIndex]?.default} required />
                                     </Col>
                                     <Col>
-                                      <Form.Control type='text' size='sm' placeholder='Description (optional)' value={formData.description} onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))} />
+                                      <Form.Control type='text' size='sm' placeholder='Description (optional)' value={formData.description} onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))} disabled={editIndex !== null && eventParams[selectedEvent]?.[editIndex]?.default} />
                                     </Col>
                                     <Col>
                                       <Form.Control type='text' size='sm' placeholder='Parameter value' value={formData.value} onChange={(e) => setFormData((prev) => ({ ...prev, value: e.target.value }))} required />
@@ -275,7 +336,7 @@ export default function EventRequestBuilder() {
 
                               {result && (
                                 <Alert variant={"error" in result ? "danger" : "success"} className='mt-3'>
-                                  {"error" in result ? result.error : JSON.stringify(result, null, 2)}
+                                  {"error" in result ? result.error : result.data}
                                 </Alert>
                               )}
                             </Accordion.Body>
