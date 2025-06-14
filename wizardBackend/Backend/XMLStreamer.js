@@ -286,6 +286,225 @@ app.post("/parse-local", async (req, res) => {
   }
 });
 
+// --- XML Validation Logic Ported from Frontend ---
+
+// Helper: Extract currency from price string
+function extractCurrency(price) {
+  const currencyAtEnd = price.trim().split(/\s+/).pop();
+  if (currencyAtEnd && /^[A-Z]{3}$/.test(currencyAtEnd)) {
+    return currencyAtEnd;
+  }
+  const isoMatch = price.match(/[A-Z]{3}/);
+  if (isoMatch) return isoMatch[0];
+  const symbolMatch = price.match(/[$€£¥₺]/);
+  if (symbolMatch) {
+    const symbolToCode = { $: "USD", "€": "EUR", "£": "GBP", "¥": "JPY", "₺": "TRY" };
+    return symbolToCode[symbolMatch[0]] || symbolMatch[0];
+  }
+  return null;
+}
+
+function isValidUrl(url) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+const CATEGORY_SEPARATORS = [">", ";", "/", "|", ">>", ">>>"];
+const MANDATORY_TAGS = [
+  { tag: "product_code", altTag: "", label: "Product Code" },
+  { tag: "product_name", altTag: "", label: "Product Name" },
+  { tag: "category_code", altTag: "", label: "Category Code" },
+  { tag: "category_name", altTag: "", label: "Category Name" },
+  { tag: "original_price", altTag: "", label: "Original Price" },
+  { tag: "discounted_price", altTag: "", label: "Discounted Price" },
+  { tag: "original_price_currency", altTag: "", label: "Price Currency" },
+  { tag: "is_active", altTag: "", label: "Is Active" },
+  { tag: "product_url", altTag: "", label: "Product URL" },
+  { tag: "medium_image", altTag: "", label: "Image URL" },
+];
+
+function getTagContent(xmlContent, tagName) {
+  if (!tagName) return [];
+  const patterns = [tagName, `g:${tagName}`, tagName.replace("g:", "")];
+  if (tagName === "original_price") patterns.push("price", "g:price");
+  else if (tagName === "discounted_price") patterns.push("sale_price", "g:sale_price");
+  for (const pattern of patterns) {
+    const regex = new RegExp(`<${pattern}[^>]*>([^<]+)</${pattern}>`, "g");
+    const matches = [...xmlContent.matchAll(regex)];
+    if (matches.length > 0) {
+      return matches.map((match) => match[1].trim());
+    }
+  }
+  return [];
+}
+
+function validateMandatoryTags(xmlContent, currentMappings) {
+  const errors = [];
+  const originalPriceContent = getTagContent(xmlContent, "original_price");
+  const discountedPriceContent = getTagContent(xmlContent, "discounted_price");
+  const originalPriceCurrencies = originalPriceContent.map(extractCurrency).filter(Boolean);
+  const discountedPriceCurrencies = discountedPriceContent.map(extractCurrency).filter(Boolean);
+  const originalPriceHasCurrency = originalPriceCurrencies.length > 0;
+  const discountedPriceHasCurrency = discountedPriceCurrencies.length > 0;
+  if (originalPriceHasCurrency && discountedPriceHasCurrency) {
+    const uniqueCurrencies = new Set([...originalPriceCurrencies, ...discountedPriceCurrencies]);
+    if (uniqueCurrencies.size > 1) {
+      errors.push({ field: "currency", message: `Currency mismatch: Found different currencies in prices (${Array.from(uniqueCurrencies).join(", ")})` });
+    }
+  }
+  if ((originalPriceHasCurrency && !discountedPriceHasCurrency) || (!originalPriceHasCurrency && discountedPriceHasCurrency)) {
+    errors.push({ field: "currency", message: "Inconsistent currency usage: Currency found in only one of the price fields" });
+  }
+  MANDATORY_TAGS.forEach(({ tag, altTag, label }) => {
+    const mappedTag = currentMappings[`text_${tag}`];
+    const content = mappedTag ? getTagContent(xmlContent, mappedTag) : getTagContent(xmlContent, tag);
+    if (tag === "original_price_currency" && originalPriceHasCurrency && discountedPriceHasCurrency) {
+      const uniqueCurrencies = new Set([...originalPriceCurrencies, ...discountedPriceCurrencies]);
+      if (uniqueCurrencies.size === 1) return;
+    }
+    if (content.length === 0) {
+      const tagDisplay = tag;
+      const altTagDisplay = altTag ? ` or ${altTag}` : "";
+      errors.push({ field: tag, message: `Missing mandatory field: ${label} (${tagDisplay}${altTagDisplay})` });
+    }
+  });
+  return errors;
+}
+
+function validateFieldContents(xmlContent, currentMappings) {
+  const errors = [];
+  MANDATORY_TAGS.forEach(({ tag, label }) => {
+    const mappedTag = currentMappings[`text_${tag}`] || tag;
+    const content = getTagContent(xmlContent, mappedTag);
+    if (content.length === 0) {
+      errors.push({ field: tag, message: `Missing value for mandatory field: ${label}` });
+      return;
+    }
+    content.forEach((value) => {
+      if (!value || value.trim() === "" || value.toLowerCase() === "null" || value.toLowerCase() === "undefined") {
+        errors.push({ field: tag, message: `Invalid value found for ${label}: Value cannot be empty, null, or undefined` });
+      }
+    });
+    if (tag === "product_url" || tag === "medium_image") {
+      content.forEach((url) => {
+        if (!isValidUrl(url)) {
+          errors.push({ field: tag, message: `Invalid URL format in <${mappedTag}>. URL must start with http:// or https://` });
+        }
+      });
+    }
+  });
+  const priceFields = [
+    { tag: "original_price", label: "Original Price" },
+    { tag: "discounted_price", label: "Discounted Price" },
+  ];
+  priceFields.forEach(({ tag, label }) => {
+    const mappedTag = currentMappings[`text_${tag}`] || tag;
+    const content = getTagContent(xmlContent, mappedTag);
+    content.forEach((price) => {
+      const cleanPrice = price.replace(/[$€£¥₺]/g, "").trim();
+      if (!/^\d+(\.\d+)?$/.test(cleanPrice)) {
+        errors.push({ field: tag, message: `Invalid price format for ${label}: "${price}". Price must be a numerical value.` });
+      }
+    });
+  });
+  return errors;
+}
+
+function validateCategoryHierarchy(xmlContent, categoryCodeTag, categoryNameTag) {
+  const errors = [];
+  function getTagContentLocal(tagName, alternativeTag = "") {
+    if (!tagName) return [];
+    const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedTagName = escapeRegex(tagName);
+    const pattern = new RegExp(`<${escapedTagName}[^>]*>([^<]*)</${escapedTagName}>`, "g");
+    const matches = xmlContent.match(pattern);
+    const values = matches
+      ? matches.map((match) =>
+          match
+            .replace(new RegExp(`^<${escapedTagName}[^>]*>`), "")
+            .replace(new RegExp(`</${escapedTagName}>$`), "")
+            .trim()
+        )
+      : [];
+    if (values.length === 0 && alternativeTag) {
+      return getTagContentLocal(alternativeTag);
+    }
+    return values.filter((v) => v !== "");
+  }
+  const categoryCodes = getTagContentLocal(categoryCodeTag, "category_id");
+  const categoryNames = getTagContentLocal(categoryNameTag, "category_desc");
+  if (categoryCodes.length === 0) {
+    errors.push({ field: "category", message: `Category codes are missing in the XML file (looking for <${categoryCodeTag}> tag)` });
+    return errors;
+  }
+  if (categoryNames.length === 0) {
+    errors.push({ field: "category", message: `Category names are missing in the XML file (looking for <${categoryNameTag}> tag)` });
+    return errors;
+  }
+  if (categoryCodes.length !== categoryNames.length) {
+    errors.push({ field: "category", message: "The number of category codes does not match the number of category names" });
+    return errors;
+  }
+  function findSeparator(value) {
+    for (const separator of CATEGORY_SEPARATORS) {
+      if (value.includes(separator)) return separator;
+    }
+    return null;
+  }
+  categoryCodes.forEach((code, index) => {
+    const name = categoryNames[index];
+    const codeSeparator = findSeparator(code);
+    const nameSeparator = findSeparator(name);
+    if (!codeSeparator && !nameSeparator) return;
+    if ((codeSeparator && !nameSeparator) || (!codeSeparator && nameSeparator)) {
+      errors.push({ field: "category", message: "Category hierarchy mismatch: One value has hierarchy separator but the other doesn't" });
+      return;
+    }
+    if (codeSeparator !== nameSeparator) {
+      errors.push({ field: "category", message: `Category hierarchy mismatch: Different separators used (${codeSeparator} vs ${nameSeparator})` });
+      return;
+    }
+    if (codeSeparator) {
+      const codeLevels = code.split(codeSeparator).length;
+      const nameLevels = name.split(codeSeparator).length;
+      if (codeLevels !== nameLevels) {
+        errors.push({ field: "category", message: `Category hierarchy mismatch: Different number of levels (${codeLevels} vs ${nameLevels})` });
+      }
+    }
+  });
+  return errors;
+}
+
+// --- END XML Validation Logic ---
+
+// New endpoint for XML validation
+app.post("/validate-xml-content", (req, res) => {
+  try {
+    const { xmlContent, currentMappings } = req.body;
+    if (!xmlContent) {
+      return res.status(400).json({ success: false, error: "xmlContent is required" });
+    }
+    // Use mappings or fallback to default tags
+    const mappedCategoryCode = currentMappings?.text_category_code || "category_code";
+    const mappedCategoryName = currentMappings?.text_category_name || "category_name";
+    const errors = [];
+    errors.push(...validateMandatoryTags(xmlContent, currentMappings || {}));
+    errors.push(...validateFieldContents(xmlContent, currentMappings || {}));
+    errors.push(...validateCategoryHierarchy(xmlContent, mappedCategoryCode, mappedCategoryName));
+    if (errors.length === 0) {
+      return res.json({ success: true, validation: [{ field: "success", message: "✓ All validations passed successfully" }] });
+    } else {
+      return res.json({ success: false, validation: errors });
+    }
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Server initialization
 app.listen(CONFIG.PORT, () => {
   console.log(`✅ XML Parser running at: http://localhost:${CONFIG.PORT}`);

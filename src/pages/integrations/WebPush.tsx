@@ -19,6 +19,7 @@ const WebPush: FC = () => {
   const [isScriptLoading, setIsScriptLoading] = useState(false);
   const [swError, setSwError] = useState(false);
   const [scriptError, setScriptError] = useState(false);
+  const [isUrlValid, setIsUrlValid] = useState(true);
 
   const serviceWorkerCode = `importScripts('https://wps.relateddigital.com/relatedpush_sw.js');`;
   const manifestJSONCode = `
@@ -36,6 +37,15 @@ var e = d.createElement(t),
     e.async = true;
     s.parentNode.insertBefore(e,s);
 }(document,"script"));</script>`;
+
+  const validateUrl = (url: string) => {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
 
   const checkServiceWorker = async () => {
     if (!baseUrl) {
@@ -161,29 +171,45 @@ var e = d.createElement(t),
                 <p className='mb-3'>Configure your web push notification settings here. This allows you to send push notifications to your users.</p>
                 <Form.Group className='mb-3'>
                   <Form.Label>Base URL</Form.Label>
-                  <Form.Control type='text' value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder='https://example.com' disabled={isSwLoading || isScriptLoading} />
+                  <Form.Control
+                    type='text'
+                    value={baseUrl}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setBaseUrl(value);
+                      setIsUrlValid(value === "" || validateUrl(value));
+                    }}
+                    placeholder='https://example.com'
+                    disabled={isSwLoading || isScriptLoading}
+                    isInvalid={baseUrl !== "" && !isUrlValid}
+                  />
                   <Form.Text className='text-muted'>Kontrol edilecek sitenin Base URL'ini giriniz</Form.Text>
+                  {baseUrl !== "" && !isUrlValid && <div className='text-danger'>Lütfen geçerli bir URL giriniz (örn: https://example.com)</div>}
                 </Form.Group>
                 <div className='d-flex gap-2 mb-3'>
-                  <Button variant='primary' onClick={checkServiceWorker} disabled={!baseUrl || isSwLoading}>
+                  <Button variant='primary' onClick={checkServiceWorker} disabled={!baseUrl || isSwLoading || !isUrlValid}>
                     {isSwLoading ? "Kontrol Ediliyor..." : "Service Worker'ı Kontrol Et"}
                   </Button>
-                  <Button variant='primary' onClick={checkWebPushScript} disabled={!baseUrl || isScriptLoading}>
+                  <Button variant='primary' onClick={checkWebPushScript} disabled={!baseUrl || isScriptLoading || !isUrlValid}>
                     {isScriptLoading ? "Kontrol Ediliyor..." : "Web Push Script'i Kontrol Et"}
                   </Button>
                 </div>
                 <Row className='d-flex flex-column gap-2 align-items-baseline'>
                   <div className='d-flex gap-5'>
                     <span>Service Worker Sonucu: </span>
-                    <Alert className='py-0 m-0' variant={swError ? "danger" : "success"}>
-                      {swResult}
-                    </Alert>
+                    {swResult && (
+                      <Alert className='py-0 m-0' variant={swError ? "danger" : "success"}>
+                        {swResult}
+                      </Alert>
+                    )}
                   </div>
                   <div className='d-flex gap-5'>
                     <span>Web Push Script Sonucu: </span>
-                    <Alert variant={scriptError ? "danger" : "success"} className='py-0 m-0'>
-                      {scriptResult}
-                    </Alert>
+                    {scriptResult && (
+                      <Alert variant={scriptError ? "danger" : "success"} className='py-0 m-0'>
+                        {scriptResult}
+                      </Alert>
+                    )}
                   </div>
                 </Row>
               </div>
