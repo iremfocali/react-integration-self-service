@@ -5,19 +5,19 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 // import widget/custom components
 import { PageHeading } from "widgets";
 
-const Event: FC = () => {
+const Monitoring: FC = () => {
   return (
     <Container fluid className='p-6'>
-      <PageHeading heading='Event Integration' />
+      <PageHeading heading='System Monitoring' />
       <Row>
         <Col lg={12} md={12} sm={12}>
           <Card>
             <Card.Header>
-              <h4 className='mb-0'>Event Integration Settings</h4>
+              <h4 className='mb-0'>System Status</h4>
             </Card.Header>
             <Card.Body>
-              <p className='mb-0'>Configure your event integration settings here. This allows you to track and manage events in your application.</p>
-              {/* Add your event integration specific content here */}
+              <p className='mb-0'>Monitor your system's performance, health, and status here. This dashboard provides real-time insights into your application's operations.</p>
+              {/* Add your monitoring specific content here */}
             </Card.Body>
           </Card>
         </Col>
@@ -26,4 +26,4 @@ const Event: FC = () => {
   );
 };
 
-export default Event;
+export default Monitoring;

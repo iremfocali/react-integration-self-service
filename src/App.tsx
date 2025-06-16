@@ -17,7 +17,7 @@ import LayoutVertical from "pages/dashboard/LayoutVertical";
 import Documentation from "pages/dashboard/Documentation";
 import ChangeLog from "pages/dashboard/Changelog";
 import ApiDemo from "./pages/dashboard/pages/ApiDemo";
-import Event from "./pages/integrations/Event";
+import Monitoring from "./pages/integrations/Monitoring";
 import EventGTM from "./pages/integrations/EventGTM";
 import EventGTMCopy from "./pages/integrations/EventGTM copy";
 import EventDirect from "./pages/integrations/EventDirect";
@@ -66,6 +66,11 @@ const App = () => {
           Component: Dashboard,
         },
         {
+          id: "monitoring",
+          path: "/monitoring",
+          Component: Monitoring,
+        },
+        {
           id: "pages",
           path: "/pages",
           children: [
@@ -96,8 +101,8 @@ const App = () => {
           path: "/integrations",
           children: [
             {
-              path: "event",
-              Component: Event,
+              path: "monitoring",
+              Component: Monitoring,
             },
             {
               path: "event/gtm",

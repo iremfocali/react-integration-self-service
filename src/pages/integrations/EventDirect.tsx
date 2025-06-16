@@ -5,7 +5,7 @@ import { useState } from "react";
 // import widget/custom components
 import { PageHeading } from "widgets";
 
-type EventType = "pageView" | "cart" | "login" | "signup" | "addToFav" | "removeFromFav" | "productDetail" | "purchase";
+type EventType = "pageView" | "cart" | "login" | "signup" | "addToFav" | "removeFromFav" | "productDetail" | "purchase" | "categoryView" | "onSiteSearch";
 
 type EventParameter = {
   key: string;
@@ -31,6 +31,8 @@ const Event = () => {
     removeFromFav: [],
     productDetail: [],
     purchase: [],
+    categoryView: [],
+    onSiteSearch: [],
   });
 
   const handleAddParameter = (eventType: EventType, key: string, value: string) => {
@@ -75,6 +77,19 @@ const Event = () => {
       parameters: [
         { key: "OM.exVisitorID", value: "User Code", isDefault: true },
         { key: "OM.b_login", value: "1", isDefault: true },
+      ],
+      isDefault: true,
+    },
+    categoryView: {
+      functionName: "rdCategoryView",
+      parameters: [{ key: "OM.clist", value: "Your category code. Must be the same as the category code in the product XML.", isDefault: true }],
+      isDefault: true,
+    },
+    onSiteSearch: {
+      functionName: "rdOnSiteSearch",
+      parameters: [
+        { key: "OM.OSS", value: "Search query", isDefault: true },
+        { key: "OM.OSSR", value: "Search result count", isDefault: true },
       ],
       isDefault: true,
     },
