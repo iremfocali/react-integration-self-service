@@ -26,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu, toggleMenu }) => {
   const generateLink = (item: ChildrenItemProps) => {
     return (
       <Link to={item.link} className={`nav-link ${location.pathname === item.link ? "active" : ""}`} onClick={() => (isMobile ? toggleMenu() : showMenu)}>
+        {item.icon ? <i className={`nav-icon fe fe-${item.icon} me-2`}></i> : null}
         {item.name}
         {item.badge && (
           <Badge className='ms-1' bg={item.badgecolor || "primary"}>
@@ -39,9 +40,9 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu, toggleMenu }) => {
   return (
     <Fragment>
       <SimpleBar style={{ maxHeight: "100vh" }}>
-        <div className='nav-scroller' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className='nav-scroller' style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <Link to='/' className='navbar-brand'>
-            <Image src='/images/brand/logo/wizard.jpg' style={{ width: '100px', height: '100px' }} alt='' />
+            <Image src='/images/brand/logo/wizard.png' style={{ width: "100px", height: "100px" }} alt='' />
           </Link>
         </div>
         {/* Dashboard Menu */}
