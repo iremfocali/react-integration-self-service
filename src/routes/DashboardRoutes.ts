@@ -28,7 +28,7 @@ import { v4 as uuid } from "uuid";
 export const DashboardMenu: DashboardMenuProps[] = [
   {
     id: uuid(),
-    title: "Dashboard",
+    title: "Home",
     icon: "home",
     link: "/",
   },
@@ -48,6 +48,7 @@ export const DashboardMenu: DashboardMenuProps[] = [
       { id: uuid(), link: "/pages/pricing", name: "Pricing" },
       { id: uuid(), link: "/not-found", name: "404 Error" },
     ],
+    hidden: true,
   },
   {
     id: uuid(),
