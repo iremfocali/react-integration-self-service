@@ -1,6 +1,6 @@
 {
   "exportFormatVersion": 2,
-  "exportTime": "2025-04-25 22:56:24",
+  "exportTime": "2025-06-29 15:43:09",
   "containerVersion": {
     "path": "accounts/6050054095/containers/95073763/versions/0",
     "accountId": "6050054095",
@@ -44,7 +44,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsCartLoaded() {\n    var pbid = {{RMC-ecommerce.cart.basket_id}};\n    var pbArray = {{RMC-CartArray-PB-JS}};\n    var puArray = {{RMC-CartArray-PU-JS}};\n    var pprArray = {{RMC-CartArray-PPR-JS}};\n    var pbt = {{RMC-CartArray-PBT-JS}};\n    var pb = pbArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < pbArray.length; index++) {\n        var productCode = pbArray[index];\n        var productQty = puArray[index];\n        var productPrice = pprArray[index];\n        if (!pbid || !productCode || !productQty || !productPrice || exceptionArray.includes(productCode) || isNaN(productQty) || isNaN(productPrice)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductBasket\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.pbid\", pbid);\n        VL.AddParameter(\"OM.pb\", pb);\n        VL.AddParameter(\"OM.pu\", pu)\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.pbt\", pbt);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCartLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCartLoaded();\n</script>"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsCartLoaded() {\n    var pbid = {{RMC-ecommerce.cart.basket_id}};\n    var pbArray = {{RMC-CartArray-PB-JS}};\n    var puArray = {{RMC-CartArray-PU-JS}};\n    var pprArray = {{RMC-CartArray-PPR-JS}};\n    var pbt = {{RMC-CartArray-PBT-JS}};\n    var pb = pbArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < pbArray.length; index++) {\n        var productCode = pbArray[index];\n        var productQty = puArray[index];\n        var productPrice = pprArray[index];\n        if (!pbid || !productCode || !productQty || !productPrice || exceptionArray.includes(productCode) || isNaN(productQty) || isNaN(productPrice)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductBasket\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.pbid\", pbid);\n        VL.AddParameter(\"OM.pb\", pb);\n        VL.AddParameter(\"OM.pu\", pu)\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.pbt\", pbt);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCartLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCartLoaded();\n</script>"
           },
           {
             "type": "BOOLEAN",
@@ -52,7 +52,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1678178708796",
+        "fingerprint": "1751204137486",
         "firingTriggerId": ["22"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -72,7 +72,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsLoginLoaded() {\n    var userid = {{RMC-UserID}};\n    var VL = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.AddParameter(\"OM.b_login\", \"1\");\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"Login\");\n    }\n    VL.Collect();\n    VL.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsLoginLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsLoginLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsLoginLoaded() {\n    var userid = {{RMC-UserID}};\n    var VL = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.AddParameter(\"OM.b_login\", \"1\");\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"Login\");\n    }\n    VL.Collect();\n    VL.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsLoginLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsLoginLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -80,7 +80,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1669630156918",
+        "fingerprint": "1751204116025",
         "firingTriggerId": ["31"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -100,7 +100,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPurchaseLoaded() {\n    var tid = {{RMC-ecommerce.checkout.purchase_id}};\n    var ppArray = {{RMC-PurchaseArray-PP-JS}};\n    var puArray = {{RMC-PurchaseArray-PU-JS}};\n    var pprArray = {{RMC-PurchaseArray-PPR-JS}};\n    var pp = ppArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var ppt = {{RMC-PurchaseArray-PPT-JS}};\n    var userid = {{RMC-ecommerce.checkout.vl_userID}};\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < ppArray.length; index++) {\n        var ppti = ppArray[index];\n        var puti = puArray[index];\n        var pprti = pprArray[index];\n        if (!tid || !ppti || !userid || !puti || !pprti || exceptionArray.includes(userid) || exceptionArray.includes(ppti) || isNaN(puti) || isNaN(pprti)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductPurchase\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.tid\", tid);\n        VL.AddParameter(\"OM.pp\", pp);\n        VL.AddParameter(\"OM.pu\", pu);\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.ppt\", ppt);\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPurchaseLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPurchaseLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPurchaseLoaded() {\n    var tid = {{RMC-ecommerce.checkout.purchase_id}};\n    var ppArray = {{RMC-PurchaseArray-PP-JS}};\n    var puArray = {{RMC-PurchaseArray-PU-JS}};\n    var pprArray = {{RMC-PurchaseArray-PPR-JS}};\n    var pp = ppArray.join(';');\n    var pu = puArray.join(';');\n    var ppr = pprArray.join(';');\n    var ppt = {{RMC-PurchaseArray-PPT-JS}};\n    var userid = {{RMC-ecommerce.checkout.vl_userID}};\n    var exceptionArray = ['null', 'undefined', ''];\n    var exception = false;\n    var VL = new Visilabs();\n    for (var index = 0; index < ppArray.length; index++) {\n        var ppti = ppArray[index];\n        var puti = puArray[index];\n        var pprti = pprArray[index];\n        if (!tid || !ppti || !userid || !puti || !pprti || exceptionArray.includes(userid) || exceptionArray.includes(ppti) || isNaN(puti) || isNaN(pprti)) {\n            exception = true;\n            break;\n        }\n    }\n    if (exception) {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"ProductPurchase\");\n        VL.Collect();\n    } else {\n        VL.AddParameter(\"OM.tid\", tid);\n        VL.AddParameter(\"OM.pp\", pp);\n        VL.AddParameter(\"OM.pu\", pu);\n        VL.AddParameter(\"OM.ppr\", ppr);\n        VL.AddParameter(\"OM.ppt\", ppt);\n        VL.AddParameter(\"OM.exVisitorID\", userid);\n        VL.Collect();\n        VL.SuggestActions();\n    }\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPurchaseLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPurchaseLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -108,7 +108,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1676631058141",
+        "fingerprint": "1751204081091",
         "firingTriggerId": ["32"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -128,7 +128,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPageLoaded(){\n var vl = new Visilabs();\n vl.Collect();\n vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPageLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPageLoaded();\n</script>"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsPageLoaded(){\n var vl = new Visilabs();\n vl.Collect();\n vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsPageLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsPageLoaded();\n</script>"
           },
           {
             "type": "BOOLEAN",
@@ -136,7 +136,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1669630176882",
+        "fingerprint": "1751204106924",
         "firingTriggerId": ["7"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -156,7 +156,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSearchLoaded() {\n    var search = {{RMC-Search}}\n    var VL = new Visilabs();\n    if (search && search.word) {\n        VL.AddParameter(\"OM.OSS\", search.word);\n        if (search.result) {\n            VL.AddParameter(\"OM.OSSR\", search.result);\n        }\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"OnSiteSearch\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSearchLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSearchLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSearchLoaded() {\n    var search = {{RMC-Search}}\n    var VL = new Visilabs();\n    if (search && search.word) {\n        VL.AddParameter(\"OM.OSS\", search.word);\n        if (search.result) {\n            VL.AddParameter(\"OM.OSSR\", search.result);\n        }\n    } else {\n        VL.AddParameter(\"OM.VLEventException\", \"True\");\n        VL.AddParameter(\"OM.VLEventExceptionName\", \"OnSiteSearch\");\n    }\n\n    VL.Collect();\n    VL.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSearchLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSearchLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -164,7 +164,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1678178905658",
+        "fingerprint": "1751204052197",
         "firingTriggerId": ["24"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -184,7 +184,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsAddFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsAddFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsAddFavLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsAddFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsAddFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsAddFavLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -192,7 +192,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1678178600563",
+        "fingerprint": "1751204157781",
         "firingTriggerId": ["4"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -212,7 +212,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsCategoryLoaded() {\n    var clist = {{RMC-CategoryID}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (clist && !exceptionArray.includes(clist)) {\n        vl.AddParameter(\"OM.clist\", clist);\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"CategoryView\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCategoryLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCategoryLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsCategoryLoaded() {\n    var clist = {{RMC-CategoryID}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (clist && !exceptionArray.includes(clist)) {\n        vl.AddParameter(\"OM.clist\", clist);\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"CategoryView\");\n        vl.AddParameter(\"OM.VLEventExceptionCategory\", \"CategoryView eventinde OM.clist değeri \"+ clist +\" olarak gelmektedir.\");\n\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsCategoryLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsCategoryLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -220,7 +220,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1673265676225",
+        "fingerprint": "1751211751993",
         "firingTriggerId": ["20"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -240,7 +240,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSignupLoaded() {\n    var userid = {{RMC-UserID}};\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        vl.AddParameter(\"OM.exVisitorID\", userid);\n        vl.AddParameter(\"OM.b_sgnp\", \"1\");\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"SignUp\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSignupLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSignupLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsSignupLoaded() {\n    var userid = {{RMC-UserID}};\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (userid && !exceptionArray.includes(userid)) {\n        vl.AddParameter(\"OM.exVisitorID\", userid);\n        vl.AddParameter(\"OM.b_sgnp\", \"1\");\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"SignUp\");\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsSignupLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsSignupLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -248,7 +248,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1676452441739",
+        "fingerprint": "1751204041080",
         "firingTriggerId": ["17"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -268,7 +268,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsProductLoaded() {\n    var product = {{RMC-ecommerce.detail.product}}\n    var vl = new Visilabs();\n    \n    var exceptionArray = ['null', 'undefined', ''];\n    if(product && product.id && product.name && product.price && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.name) && !isNaN(product.price)){\n        vl.AddParameter(\"OM.pv\", product.id);\n        vl.AddParameter(\"OM.pn\", product.name);\n        vl.AddParameter(\"OM.ppr\", product.price);\n        if(product.stock && !isNaN(product.stock)){\n            vl.AddParameter(\"OM.inv\", product.stock);\n        }\n        if(product.brand && !exceptionArray.includes(product.brand)){\n            vl.AddParameter(\"OM.pv.1\", product.brand);\n        }\n        if(product.category && !exceptionArray.includes(product.category)){\n            vl.AddParameter(\"OM.cat\", product.category);\n        }\n    }else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductView\");\n      var url=window.location.href;\n      vl.AddParameter(\"OM.pageUrl\", url);\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsProductLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsProductLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsProductLoaded() {\n    var product = {{RMC-ecommerce.detail.product}}\n    var vl = new Visilabs();\n    \n    var exceptionArray = ['null', 'undefined', ''];\n    if(product && product.id && product.name && product.price && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.name) && !isNaN(product.price)){\n        vl.AddParameter(\"OM.pv\", product.id);\n        vl.AddParameter(\"OM.pn\", product.name);\n        vl.AddParameter(\"OM.ppr\", product.price);\n        if(product.stock && !isNaN(product.stock)){\n            vl.AddParameter(\"OM.inv\", product.stock);\n        }\n        if(product.brand && !exceptionArray.includes(product.brand)){\n            vl.AddParameter(\"OM.pv.1\", product.brand);\n        }\n        if(product.category && !exceptionArray.includes(product.category)){\n            vl.AddParameter(\"OM.cat\", product.category);\n        }\n    }else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductView\");\n      var url=window.location.href;\n      vl.AddParameter(\"OM.pageUrl\", url);\n    }\n    vl.Collect();\n    vl.SuggestActions();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsProductLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsProductLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -276,7 +276,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1741189558121",
+        "fingerprint": "1751204090533",
         "firingTriggerId": ["28"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -296,7 +296,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsRemoveFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"-1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsRemoveFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsRemoveFavLoaded();\n</script>\n"
+            "value": "<script type=\"text/javascript\">\nfunction OnVisilabsRemoveFavLoaded() {\n    var product = {{RMC-Product}}\n    var vl = new Visilabs();\n    var exceptionArray = ['null', 'undefined', ''];\n    if (product && product.id && product.price && !isNaN(product.price) && !exceptionArray.includes(product.id) && !exceptionArray.includes(product.price)) {\n        vl.AddParameter(\"OM.pf\", product.id);\n        vl.AddParameter(\"OM.pfu\", \"-1\");\n        vl.AddParameter(\"OM.ppr\", parseFloat(product.price));\n    } else {\n        vl.AddParameter(\"OM.VLEventException\", \"True\");\n        vl.AddParameter(\"OM.VLEventExceptionName\", \"ProductFav\");\n    }\n    vl.Collect();\n}\n\n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = OnVisilabsRemoveFavLoaded;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else OnVisilabsRemoveFavLoaded();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -304,7 +304,7 @@
             "value": "false"
           }
         ],
-        "fingerprint": "1678178884104",
+        "fingerprint": "1751204069733",
         "firingTriggerId": ["14"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -324,7 +324,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script>\nfunction HealthTrigger(){\n    var VL = new Visilabs();\n    var loginRule =document.querySelector(\".user-name\"); // Sayfa da giriş yapıp yada kayıt olduktan sonra gelen merhaba yada user isimini içeren HTML elemanı\n    var url=document.location.href; // Sayfa URL i \n    var path=document.location.pathname; // Sayfa Path i\n    var elemProduct= document.querySelector(\".product-page\"); // Product sayfasını belirleyen Eleman yada URL bilgisi\n    var elemCategory= document.querySelector(\".list__body\"); // Category sayfasını belirleyen Eleman yada URL bilgisi\n    \n    \n    if(loginRule && VisiParameters[\"OM.exvisitorID\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Login or Sign Up\");\n        console.log(\"Login Signup eventinde hata var\");\n    }\n    \n    if(elemProduct && !VisiParameters[\"OM.pv\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product View\");\n        console.log(\"Product view eventinde hata var\");\n    }\n    \n    if(elemCategory && !VisiParameters[\"OM.clist\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Category Page View\");\n        console.log(\"Category view eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/baskets/basket/\") &&!VisiParameters[\"OM.pbid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product Basket\");\n        console.log(\"CartView eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/orders/completed/\") &&!VisiParameters[\"OM.tid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product Purchase\");\n        console.log(\"Purchase eventinde hata var\");\n    }\n    \n    if(url.includes(\"search_text\") && !VisiParameters[\"OM.OSS\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"On Site Search\");\n        console.log(\"Search eventinde hata var\");\n    }\n    \nVL.Collect();\nVL.SuggestActions();\n}\n    \n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = HealthTrigger;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else HealthTrigger();\n</script>\n"
+            "value": "<script>\nfunction HealthTrigger(){\n    var VL = new Visilabs();\n    var loginRule =document.querySelector(\".user-name\"); // Sayfa da giriş yapıp yada kayıt olduktan sonra gelen merhaba yada user isimini içeren HTML elemanı\n    var url=document.location.href; // Sayfa URL i \n    var path=document.location.pathname; // Sayfa Path i\n    var elemProduct= document.querySelector(\".product-page\"); // Product sayfasını belirleyen Eleman yada URL bilgisi\n    var elemCategory= document.querySelector(\".list__body\"); // Category sayfasını belirleyen Eleman yada URL bilgisi\n    \n    \n    if(loginRule && VisiParameters[\"OM.exvisitorID\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Login or Sign Up\");\n        console.log(\"Login Signup eventinde hata var\");\n    }\n    \n    if(elemProduct && !VisiParameters[\"OM.pv\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product View\");\n        console.log(\"Product view eventinde hata var\");\n    }\n    \n    if(elemCategory && !VisiParameters[\"OM.clist\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Category Page View\");\n        console.log(\"Category view eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/baskets/basket/\") &&!VisiParameters[\"OM.pbid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Produt Basket\");\n        console.log(\"CartView eventinde hata var\");\n    }\n    \n    \n    if(url.includes(\"/orders/completed/\") &&!VisiParameters[\"OM.tid\"]){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"Product Purchase\");\n        console.log(\"Purchase eventinde hata var\");\n    }\n    \n    if(url.includes(\"search_text\") && !VisiParameters[\"OM.OSS\"] ){\n        VL.AddParameter(\"OM.VLControlEventException\", \"True\");\n        VL.AddParameter(\"OM.VLControlEventExceptionName\", \"On Site Search\");\n        console.log(\"Search eventinde hata var\");\n    }\n    \nVL.Collect();\nVL.SuggestActions();\n}\n    \n\nif(typeof Visilabs !== 'function'){\n    var url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs.min.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";\n    var script = document.createElement(\"script\");\n    if(location.href.toString().indexOf(\"vldebug=true\") > 0){url = (location.protocol.indexOf(\"https\")==0?\"https\":\"http\") + \"://vsh.visilabs.net/Visilabs_Debug.js?sid=\"+{{RMC-sid}}+\"&oid=\"+{{RMC-oid}}+\"\";}\n    script.onload = HealthTrigger;\n    script.type = \"text/javascript\";\n    script.src = url;\n    document.getElementsByTagName(\"head\")[0].appendChild(script);\n}else HealthTrigger();\n</script>\n"
           },
           {
             "type": "BOOLEAN",
@@ -334,34 +334,6 @@
         ],
         "fingerprint": "1701955779145",
         "firingTriggerId": ["57"],
-        "tagFiringOption": "ONCE_PER_EVENT",
-        "monitoringMetadata": {
-          "type": "MAP"
-        },
-        "consentSettings": {
-          "consentStatus": "NOT_SET"
-        }
-      },
-      {
-        "accountId": "6050054095",
-        "containerId": "95073763",
-        "tagId": "61",
-        "name": "İrem Test",
-        "type": "html",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "html",
-            "value": "<script>\n var url = \"https://avlsh.visilabs.net/504E6F37515941744B34633D/756B5036644F706C4F6A4D3D/Visilabs.min.js\"\n var script = document.createElement(\"script\");\n script.type = \"text/javascript\";\n script.src = url;\n document.getElementsByTagName(\"head\")[0].appendChild(script);\n</script>"
-          },
-          {
-            "type": "BOOLEAN",
-            "key": "supportDocumentWrite",
-            "value": "false"
-          }
-        ],
-        "fingerprint": "1701955237260",
-        "firingTriggerId": ["2147479553"],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
           "type": "MAP"
@@ -841,7 +813,7 @@
             "value": "356467332F6533766975593D"
           }
         ],
-        "fingerprint": "1665603106158",
+        "fingerprint": "1751207002063",
         "formatValue": {}
       },
       {
@@ -857,7 +829,7 @@
             "value": "676D325830564761676D453D"
           }
         ],
-        "fingerprint": "1665603106159",
+        "fingerprint": "1751207206018",
         "formatValue": {}
       },
       {
@@ -1281,7 +1253,7 @@
         "name": "Event"
       }
     ],
-    "fingerprint": "1745621784595",
+    "fingerprint": "1751211789753",
     "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6050054095/containers/95073763/versions/0?apiLink=version"
   }
 }
