@@ -15,20 +15,31 @@ app.use(bodyParser.json());
 async function checkWebPushScriptWithPuppeteer(baseUrl) {
   let browser;
   try {
-    browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
+    browser = await puppeteer.launch({ headless: false, args: ["--no-sandbox"] });
     const page = await browser.newPage();
-    await page.goto(baseUrl, { waitUntil: "networkidle2", timeout: 20000 });
 
-    const found = await page.evaluate(() => {
-      return Array.from(document.scripts).some((s) => s.src && s.src.includes("wps.relateddigital.com/relatedpush_sdk.js"));
+    // Gerçek bir tarayıcı gibi davran
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    );
+
+    let scriptRequested = false;
+    page.on('request', (request) => {
+      console.log("Request URL:", request.url()); // TÜM istekleri logla
+      if (request.url().includes("relatedpush")) {
+        scriptRequested = true;
+      }
     });
+
+    await page.goto(baseUrl, { waitUntil: "networkidle2", timeout: 30000 });
+    await page.waitForTimeout(15000);
 
     await browser.close();
 
-    if (found) {
-      return { found: true, message: "Script bulundu: Web Push entegrasyonu doğru." };
+    if (scriptRequested) {
+      return { found: true, message: "Script network üzerinden yüklendi: Web Push entegrasyonu doğru." };
     } else {
-      return { found: false, message: "Script bulunamadı: Lütfen entegrasyonu kontrol edin." };
+      return { found: false, message: "Script network üzerinden yüklenmedi: Lütfen entegrasyonu kontrol edin." };
     }
   } catch (err) {
     if (browser) await browser.close();
